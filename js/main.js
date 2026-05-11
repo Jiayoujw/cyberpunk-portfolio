@@ -90,6 +90,13 @@
         initAudioHooks();
         initVisitorCounter();
         initPageTransitions();
+        initBackToTop();
+        initProjectModal();
+        initRadarChart();
+        initTheme();
+        initContactForm();
+        initEasterDismiss();
+        initGithubHeatmap();
     }
 
     // ============================================================
@@ -194,6 +201,329 @@
                 }
             });
         });
+    }
+
+    // ============================================================
+    // BACK TO TOP
+    // ============================================================
+    function initBackToTop() {
+        var btn = document.getElementById('back-to-top');
+        var canvas = document.getElementById('btop-canvas');
+        if (!btn || !canvas) return;
+
+        var ctx = canvas.getContext('2d');
+        var cx = 25, cy = 25, r = 22;
+
+        function updateProgress() {
+            var scrollTop = window.scrollY || document.documentElement.scrollTop;
+            var docHeight = document.documentElement.scrollHeight - window.innerHeight;
+            var progress = docHeight > 0 ? Math.min(scrollTop / docHeight, 1) : 0;
+
+            if (scrollTop > window.innerHeight) {
+                btn.classList.add('visible');
+            } else {
+                btn.classList.remove('visible');
+            }
+
+            // Draw progress ring
+            ctx.clearRect(0, 0, 50, 50);
+            ctx.beginPath();
+            ctx.arc(cx, cy, r - 2, 0, Math.PI * 2);
+            ctx.strokeStyle = 'rgba(0, 255, 255, 0.15)';
+            ctx.lineWidth = 2;
+            ctx.stroke();
+
+            ctx.beginPath();
+            ctx.arc(cx, cy, r - 2, -Math.PI / 2, -Math.PI / 2 + Math.PI * 2 * progress);
+            ctx.strokeStyle = progress > 0.99 ? '#ff00ff' : '#00ffff';
+            ctx.shadowColor = progress > 0.99 ? '#ff00ff' : '#00ffff';
+            ctx.shadowBlur = 6;
+            ctx.lineWidth = 2;
+            ctx.stroke();
+            ctx.shadowBlur = 0;
+        }
+
+        window.addEventListener('scroll', updateProgress);
+        btn.addEventListener('click', function() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+        updateProgress();
+    }
+
+    // ============================================================
+    // PROJECT MODAL
+    // ============================================================
+    function initProjectModal() {
+        var overlay = document.getElementById('modal-overlay');
+        var closeBtn = document.getElementById('modal-close');
+        var titleEl = document.getElementById('modal-title');
+        var descEl = document.getElementById('modal-desc');
+        var techEl = document.getElementById('modal-tech');
+        var thumbEl = document.getElementById('modal-thumb');
+        var linkEl = document.getElementById('modal-link');
+
+        if (!overlay || !closeBtn) return;
+
+        function openModal(card) {
+            var title = card.querySelector('.project-title').textContent;
+            var desc = card.querySelector('.project-desc').textContent;
+            var techs = card.querySelectorAll('.tech-tag');
+            var thumbClass = card.querySelector('.project-thumb');
+            var thumbIcon = card.querySelector('.project-thumb-icon');
+
+            titleEl.textContent = title;
+            descEl.textContent = desc;
+            techEl.innerHTML = '';
+            techs.forEach(function(t) {
+                var span = document.createElement('span');
+                span.className = 'tech-tag';
+                span.textContent = t.textContent;
+                techEl.appendChild(span);
+            });
+
+            // Copy thumb gradient
+            if (thumbClass && thumbEl) {
+                var bgStyle = getComputedStyle(thumbClass, '::before').background;
+                thumbEl.style.background = bgStyle || 'linear-gradient(135deg, #001a1a, #001a2e)';
+            }
+
+            linkEl.innerHTML = '<span class="project-link" data-i18n="prj-link">' + I18N.t('prj-link') + '</span>';
+
+            overlay.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal() {
+            overlay.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        var cards = document.querySelectorAll('.project-card');
+        cards.forEach(function(card) {
+            card.addEventListener('click', function() { openModal(card); });
+        });
+
+        closeBtn.addEventListener('click', closeModal);
+        overlay.addEventListener('click', function(e) {
+            if (e.target === overlay) closeModal();
+        });
+
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' && overlay.classList.contains('active')) {
+                closeModal();
+            }
+        });
+    }
+
+    // ============================================================
+    // SKILLS RADAR CHART
+    // ============================================================
+    function initRadarChart() {
+        var canvas = document.getElementById('radar-canvas');
+        if (!canvas) return;
+
+        var ctx = canvas.getContext('2d');
+        var W = canvas.width = 400;
+        var H = canvas.height = 400;
+        var cx = W / 2, cy = H / 2, maxR = 150;
+
+        var labels = [
+            I18N.t('radar-frontend'), I18N.t('radar-backend'),
+            I18N.t('radar-devops'), I18N.t('radar-design'),
+            I18N.t('radar-arch'), I18N.t('radar-perf')
+        ];
+        var values = [95, 93, 86, 82, 88, 90];
+        var angles = labels.map(function(_, i) { return -Math.PI / 2 + (Math.PI * 2 * i) / labels.length; });
+
+        var animProgress = 0;
+        var animationActive = false;
+        var obs = new IntersectionObserver(function(entries) {
+            entries.forEach(function(entry) {
+                if (entry.isIntersecting && !animationActive) {
+                    animationActive = true;
+                    animateIn();
+                }
+            });
+        }, { threshold: 0.3 });
+        obs.observe(canvas);
+
+        function draw(p) {
+            ctx.clearRect(0, 0, W, H);
+
+            // Grid circles
+            [0.2, 0.4, 0.6, 0.8, 1].forEach(function(s) {
+                ctx.beginPath();
+                ctx.arc(cx, cy, maxR * s, 0, Math.PI * 2);
+                ctx.strokeStyle = 'rgba(0,255,255,' + (0.05 + s * 0.08) + ')';
+                ctx.lineWidth = 1;
+                ctx.stroke();
+            });
+
+            // Axes
+            angles.forEach(function(a) {
+                ctx.beginPath();
+                ctx.moveTo(cx, cy);
+                ctx.lineTo(cx + maxR * Math.cos(a), cy + maxR * Math.sin(a));
+                ctx.strokeStyle = 'rgba(0,255,255,0.1)';
+                ctx.stroke();
+            });
+
+            // Data polygon
+            ctx.beginPath();
+            values.forEach(function(v, i) {
+                var r = (v / 100) * maxR * p;
+                var x = cx + r * Math.cos(angles[i]);
+                var y = cy + r * Math.sin(angles[i]);
+                if (i === 0) ctx.moveTo(x, y);
+                else ctx.lineTo(x, y);
+            });
+            ctx.closePath();
+            ctx.fillStyle = 'rgba(0,255,255,0.08)';
+            ctx.fill();
+            ctx.strokeStyle = 'rgba(0,255,255,0.6)';
+            ctx.lineWidth = 2;
+            ctx.shadowColor = '#00ffff';
+            ctx.shadowBlur = 10;
+            ctx.stroke();
+            ctx.shadowBlur = 0;
+
+            // Data points
+            values.forEach(function(v, i) {
+                var r = (v / 100) * maxR * p;
+                var x = cx + r * Math.cos(angles[i]);
+                var y = cy + r * Math.sin(angles[i]);
+                ctx.beginPath();
+                ctx.arc(x, y, 4, 0, Math.PI * 2);
+                ctx.fillStyle = '#ff00ff';
+                ctx.shadowColor = '#ff00ff';
+                ctx.shadowBlur = 8;
+                ctx.fill();
+                ctx.shadowBlur = 0;
+
+                // Label
+                var lx = cx + (maxR + 25) * Math.cos(angles[i]);
+                var ly = cy + (maxR + 25) * Math.sin(angles[i]);
+                ctx.fillStyle = '#c4f0ff';
+                ctx.font = '11px "Share Tech Mono", monospace';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText(labels[i] + ' ' + v, lx, ly);
+            });
+        }
+
+        function animateIn() {
+            animProgress += 0.03;
+            if (animProgress > 1) animProgress = 1;
+            draw(Math.min(1, animProgress * animProgress)); // ease-in
+            if (animProgress < 1) requestAnimationFrame(animateIn);
+        }
+
+        // Redraw on language change
+        window.addEventListener('langchange', function() {
+            labels[0] = I18N.t('radar-frontend');
+            labels[1] = I18N.t('radar-backend');
+            labels[2] = I18N.t('radar-devops');
+            labels[3] = I18N.t('radar-design');
+            labels[4] = I18N.t('radar-arch');
+            labels[5] = I18N.t('radar-perf');
+            draw(1);
+        });
+
+        draw(0); // Initial empty draw
+    }
+
+    // ============================================================
+    // DAY/NIGHT THEME
+    // ============================================================
+    function initTheme() {
+        function updateTheme() {
+            var hour = new Date().getHours();
+            var was = document.body.dataset.themeState || '';
+            var next = hour >= 6 && hour < 18 ? 'day' : 'night';
+            if (was !== next) {
+                document.body.dataset.themeState = next;
+                document.body.className = document.body.className.replace(/theme-day|theme-night|theme-transition/g, '');
+                document.body.classList.add('theme-' + next);
+                document.body.classList.add('theme-transition');
+                setTimeout(function() {
+                    document.body.classList.remove('theme-transition');
+                }, 1500);
+            }
+        }
+        updateTheme();
+        setInterval(updateTheme, 60000);
+    }
+
+    // ============================================================
+    // CONTACT FORM
+    // ============================================================
+    function initContactForm() {
+        var form = document.getElementById('contact-form');
+        var status = document.getElementById('form-status');
+        if (!form || !status) return;
+
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            var formData = new FormData(form);
+            status.textContent = '';
+            status.className = 'form-status';
+
+            fetch(form.action, {
+                method: 'POST',
+                body: formData,
+                headers: { 'Accept': 'application/json' }
+            }).then(function(response) {
+                if (response.ok) {
+                    status.textContent = I18N.t('form-success');
+                    status.className = 'form-status';
+                    form.reset();
+                } else {
+                    throw new Error('fail');
+                }
+            }).catch(function() {
+                status.textContent = I18N.t('form-error');
+                status.className = 'form-status error';
+            });
+        });
+    }
+
+    // ============================================================
+    // EASTER EGG DISMISS
+    // ============================================================
+    function initEasterDismiss() {
+        var overlay = document.getElementById('easter-overlay');
+        var dismissBtn = document.getElementById('easter-dismiss');
+        if (!overlay || !dismissBtn) return;
+
+        dismissBtn.addEventListener('click', function() {
+            overlay.classList.remove('active');
+        });
+
+        overlay.addEventListener('click', function(e) {
+            if (e.target === overlay) overlay.classList.remove('active');
+        });
+    }
+
+    // ============================================================
+    // GITHUB HEATMAP
+    // ============================================================
+    function initGithubHeatmap() {
+        var container = document.getElementById('github-container');
+        if (!container) return;
+
+        // Try to fetch GitHub contribution SVG
+        var img = new Image();
+        img.onload = function() {
+            container.innerHTML = '';
+            var wrapper = document.createElement('div');
+            wrapper.className = 'github-calendar';
+            wrapper.appendChild(img);
+            container.appendChild(wrapper);
+        };
+        img.onerror = function() {
+            container.innerHTML = '<p class="github-loading" data-i18n="github-error">' + I18N.t('github-error') + '</p>';
+        };
+        img.src = 'https://ghchart.rshah.org/00ffff/Jiayoujw';
     }
 
     // ============================================================
@@ -304,6 +634,7 @@
 
             if (!isDeleting) {
                 el.textContent = phrase.slice(0, ++charIdx);
+                NexusAudio.keyBlip();
                 if (charIdx === phrase.length) {
                     isDeleting = true;
                     typewriterTimer = setTimeout(tick, 2000);
@@ -519,6 +850,12 @@
 
     function triggerKonami() {
         document.body.style.animation = 'gradient-flow 0.5s linear 6';
+        // Save achievement
+        var unlocked = JSON.parse(localStorage.getItem('nexus-achievements') || '[]');
+        if (unlocked.indexOf('konami') === -1) {
+            unlocked.push('konami');
+            localStorage.setItem('nexus-achievements', JSON.stringify(unlocked));
+        }
         var banner = document.createElement('div');
         banner.style.cssText = [
             'position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);',

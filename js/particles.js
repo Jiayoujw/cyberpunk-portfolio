@@ -98,9 +98,76 @@
     });
 
     // ----- Animation Loop -----
-    let frameCount = 0;
+    var frameCount = 0;
+
+    // ===== AUDIO SPECTRUM SETUP =====
+    var analyser = null;
+    var freqData = null;
+    var hasRealAudio = false;
+
+    function setupAudioVis() {
+        try {
+            var audioCtx = null;
+            // Try to hook into NexusAudio's context
+            if (window.NexusAudio && typeof window.NexusAudio.getCtx === 'function') {
+                audioCtx = window.NexusAudio.getCtx();
+            }
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+
+            analyser = audioCtx.createAnalyser();
+            analyser.fftSize = 128;
+            analyser.smoothingTimeConstant = 0.7;
+
+            // Try to connect to any existing audio destination
+            // If no real audio, create a silent oscillator for visual rhythm
+            try {
+                // Check if there are connections to destination (audio might be playing)
+                // For now, create a simulated pulse oscillator
+                var simOsc = audioCtx.createOscillator();
+                var simGain = audioCtx.createGain();
+                simOsc.connect(simGain);
+                simGain.connect(analyser);
+                // Don't connect to destination — silent visualization
+                simOsc.type = 'sawtooth';
+                simOsc.frequency.setValueAtTime(55, audioCtx.currentTime); // Low note with harmonics
+                simGain.gain.setValueAtTime(0.3, audioCtx.currentTime);
+                simOsc.start();
+                hasRealAudio = false;
+            } catch (e) {
+                analyser = null;
+            }
+
+            freqData = new Uint8Array(analyser.frequencyBinCount);
+        } catch (e) {
+            // Audio visualization unavailable
+            analyser = null;
+        }
+    }
+
+    // Try setup after user interaction
+    document.addEventListener('click', function trySetup() {
+        if (!analyser) setupAudioVis();
+    }, { once: true });
+    document.addEventListener('keydown', function trySetup() {
+        if (!analyser) setupAudioVis();
+    }, { once: true });
+
+    function getAudioEnergy() {
+        if (!analyser || !freqData) return 0;
+        analyser.getByteFrequencyData(freqData);
+        var sum = 0;
+        for (var i = 0; i < freqData.length; i++) sum += freqData[i];
+        return sum / freqData.length / 255; // 0..1
+    }
+
     function animate() {
         requestAnimationFrame(animate);
+
+        // Audio-reactive energy
+        var energy = getAudioEnergy();
+        var pulse = 1 + energy * 0.4;
 
         // Smooth rotation following mouse
         particles.rotation.x += (targetRotation.x - particles.rotation.x) * 0.04;
@@ -108,6 +175,12 @@
 
         // Slow autonomous drift
         particles.rotation.z += 0.0005;
+
+        // Audio-reactive scale and Y displacement
+        if (energy > 0.01) {
+            particles.scale.setScalar(pulse);
+            particles.position.y = Math.sin(Date.now() * 0.003) * energy * 30;
+        }
 
         // Update connecting lines every few frames (perf)
         if (frameCount % 4 === 0) {

@@ -7,10 +7,43 @@
     var input = document.getElementById('terminal-input');
     var output = document.getElementById('terminal-output');
     var body = document.getElementById('terminal-body');
+    var hintCmd = document.querySelector('.terminal-hint .hint-cmd');
     if (!input || !output || !body) return;
 
     var history = [];
     var historyIdx = -1;
+
+    // ===== Suggestion dropdown =====
+    var suggestBox = document.createElement('div');
+    suggestBox.className = 'terminal-suggestions';
+    suggestBox.style.cssText = 'position:absolute;bottom:100%;left:0;right:0;background:rgba(5,5,7,0.95);border:1px solid var(--color-border);max-height:200px;overflow-y:auto;display:none;z-index:10;font-family:var(--font-mono);font-size:0.85rem;';
+    var inputLine = input.parentElement;
+    inputLine.style.position = 'relative';
+    inputLine.appendChild(suggestBox);
+
+    function hideSuggestions() { suggestBox.style.display = 'none'; }
+
+    function showSuggestions(partial) {
+        var cmds = getCommands();
+        var keys = Object.keys(cmds).filter(function(c) { return c.startsWith(partial) && c !== partial; });
+        if (keys.length === 0) { hideSuggestions(); return; }
+        suggestBox.innerHTML = '';
+        keys.forEach(function(k) {
+            var item = document.createElement('div');
+            item.className = 'suggest-item';
+            item.style.cssText = 'padding:0.4rem 0.8rem;cursor:pointer;color:var(--color-cyan);transition:all .15s;';
+            item.innerHTML = '<span style="color:#00ffff;">' + k + '</span> <span style="color:var(--color-text-dim);font-size:0.75rem;">' + cmds[k].desc + '</span>';
+            item.addEventListener('mouseenter', function() { item.style.background = 'rgba(0,255,255,0.1)'; item.style.color = '#fff'; });
+            item.addEventListener('mouseleave', function() { item.style.background = ''; item.style.color = ''; });
+            item.addEventListener('click', function() {
+                input.value = k + ' ';
+                hideSuggestions();
+                input.focus();
+            });
+            suggestBox.appendChild(item);
+        });
+        suggestBox.style.display = 'block';
+    }
 
     // ===== Render utilities =====
     function addLine(html) {
@@ -276,8 +309,127 @@
                         '<span class="out-info">       ' + t('term-banner-tag') + '</span>'
                     ].join('\n');
                 }
+            },
+            weather: {
+                desc: t('cmd-weather-desc') || 'Get weather data',
+                run: function(args) { fetchWeather(args); return ''; }
+            },
+            jackin: {
+                desc: t('cmd-jackin-desc') || '???',
+                run: function() { triggerEasterEgg('jackin'); return ''; }
+            },
+            '2077': {
+                desc: t('cmd-2077-desc') || '???',
+                run: function() { triggerEasterEgg('2077'); return ''; }
             }
         };
+    }
+
+    // ===== WEATHER FETCH =====
+    function fetchWeather(args) {
+        var t = I18N.t.bind(I18N);
+        var city = args[0] || t('weather-default-city') || 'Tokyo';
+        // Open-Meteo uses coordinates — map common cities to coords
+        var coords = {
+            'tokyo': [35.6762, 139.6503],
+            'newyork': [40.7128, -74.006],
+            'london': [51.5074, -0.1278],
+            'beijing': [39.9042, 116.4074],
+            'shanghai': [31.2304, 121.4737],
+            'paris': [48.8566, 2.3522],
+            'berlin': [52.52, 13.405],
+            'moscow': [55.7558, 37.6173],
+            'singapore': [1.3521, 103.8198],
+            'seoul': [37.5665, 126.978],
+            'sydney': [-33.8688, 151.2093],
+            'losangeles': [34.0522, -118.2437],
+            'chicago': [41.8781, -87.6298]
+        };
+        var key = city.toLowerCase().replace(/\s/g, '');
+        var coord = coords[key] || [35.6762, 139.6503]; // default Tokyo
+        var displayCity = city.charAt(0).toUpperCase() + city.slice(1);
+
+        addLine('<span class="out-info">' + t('weather-fetching') + ' ' + displayCity + '...</span>');
+
+        var url = 'https://api.open-meteo.com/v1/forecast?latitude=' + coord[0] + '&longitude=' + coord[1] + '&current_weather=true&timezone=auto';
+
+        fetch(url).then(function(res) {
+            if (!res.ok) throw new Error('fail');
+            return res.json();
+        }).then(function(data) {
+            var w = data.current_weather;
+            var temp = w.temperature;
+            var wind = w.windspeed;
+            var code = w.weathercode;
+
+            var conditions = {
+                0: '☀️ CLEAR', 1: '🌤️ FAIR', 2: '⛅ PARTLY_CLOUDY', 3: '☁️ OVERCAST',
+                45: '🌫️ FOG', 48: '🌫️ FROST_FOG', 51: '🌧️ DRIZZLE', 53: '🌧️ DRIZZLE',
+                55: '🌧️ HEAVY_DRIZZLE', 61: '🌧️ RAIN', 63: '🌧️ HEAVY_RAIN',
+                65: '🌧️ TORRENTIAL', 71: '❄️ SNOW', 73: '❄️ SNOW', 75: '❄️ HEAVY_SNOW',
+                77: '❄️ GRAUPEL', 80: '🌧️ SHOWERS', 81: '🌧️ HEAVY_SHOWERS',
+                82: '🌧️ VIOLENT_SHOWERS', 85: '❄️ SNOW_SHOWERS', 86: '❄️ HEAVY_SNOW_SHOWERS',
+                95: '⛈️ THUNDERSTORM', 96: '⛈️ HAILSTORM', 99: '⛈️ SEVERE_STORM'
+            };
+            var cond = conditions[code] || '❓ UNKNOWN';
+
+            // Temperature bar: neon-color scale
+            var tempColor = temp < 0 ? 'var(--color-cyan)' : temp < 15 ? '#00ff41' : temp < 25 ? 'var(--color-yellow)' : temp < 35 ? 'var(--color-magenta)' : 'var(--color-red)';
+            var tempBar = '';
+            var barLen = Math.max(0, Math.min(20, Math.round((temp + 10) / 3)));
+            for (var i = 0; i < 20; i++) { tempBar += i < barLen ? '█' : '░'; }
+
+            var lines = [
+                '┌── ' + t('weather-city') + ': ' + displayCity + ' ───────────────────────────────────┐',
+                '│                                                            │',
+                '│  ' + t('weather-temp') + ': <span style="color:' + tempColor + ';font-size:1.5rem;">' + temp + '°C</span>  [' + tempBar + ']        │',
+                '│  ' + t('weather-wind') + ': ' + wind + ' ' + t('weather-ms') + '                                        │',
+                '│  ' + t('weather-condition') + ': ' + cond + '                                               │',
+                '│                                                            │',
+                '└────────────────────────────────────────────────────────────┘'
+            ];
+            addLine(lines.join('\n'));
+        }).catch(function() {
+            addLine('<span class="out-error">' + t('weather-error') + '</span>');
+        });
+    }
+
+    // ===== EASTER EGG TRIGGER =====
+    function triggerEasterEgg(code) {
+        var overlay = document.getElementById('easter-overlay');
+        var badges = document.getElementById('easter-badges');
+        if (!overlay) return;
+
+        var t = I18N.t.bind(I18N);
+        var unlocked = JSON.parse(localStorage.getItem('nexus-achievements') || '[]');
+
+        if (code === 'jackin' && unlocked.indexOf('jackin') === -1) {
+            unlocked.push('jackin');
+            localStorage.setItem('nexus-achievements', JSON.stringify(unlocked));
+        }
+        if (code === '2077' && unlocked.indexOf('2077') === -1) {
+            unlocked.push('2077');
+            localStorage.setItem('nexus-achievements', JSON.stringify(unlocked));
+        }
+
+        // Update badges
+        if (badges) {
+            var allBadges = [
+                { id: 'jackin', label: 'JACK_IN' },
+                { id: '2077', label: 'CYBER_2077' },
+                { id: 'konami', label: 'KONAMI' }
+            ];
+            badges.innerHTML = '';
+            allBadges.forEach(function(b) {
+                var span = document.createElement('span');
+                span.className = 'easter-badge' + (unlocked.indexOf(b.id) !== -1 ? ' unlocked' : '');
+                span.textContent = '[' + b.label + ']';
+                badges.appendChild(span);
+            });
+        }
+
+        overlay.classList.add('active');
+        addLine('<span class="out-success">[ACCESS_GRANTED] ' + t('easter-triggered') + '</span>');
     }
 
     // ===== SNAKE GAME =====
@@ -473,15 +625,43 @@
                 var cmds = getCommands();
                 var matches = Object.keys(cmds).filter(function(c) { return c.startsWith(partial); });
                 if (matches.length === 1) {
-                    input.value = matches[0];
+                    input.value = matches[0] + ' ';
+                    if (hintCmd) hintCmd.textContent = matches[0] + ' — ' + cmds[matches[0]].desc;
+                    hideSuggestions();
                 } else if (matches.length > 1) {
-                    addLine('<span class="out-info">' + matches.join('  ') + '</span>');
+                    // Show all matches with descriptions in output
+                    var lines = matches.map(function(m) {
+                        return '  <span class="out-cmd">' + m.padEnd(12) + '</span> <span class="out-info">' + cmds[m].desc + '</span>';
+                    });
+                    addLine('<span class="out-info">' + matches.length + ' matches:</span>\n' + lines.join('\n'));
+                    hideSuggestions();
                 }
             }
         } else if (e.key === 'l' && e.ctrlKey) {
             e.preventDefault();
             output.innerHTML = '';
         }
+    });
+
+    // Live suggestions as user types
+    input.addEventListener('input', function() {
+        var val = input.value.trim().toLowerCase();
+        if (val.length >= 1) {
+            var cmds = getCommands();
+            var exact = cmds[val];
+            if (hintCmd) {
+                hintCmd.textContent = exact ? val + ' — ' + exact.desc : (I18N.t('term-hint-cmd') || 'help');
+            }
+            showSuggestions(val);
+        } else {
+            hideSuggestions();
+            if (hintCmd) hintCmd.textContent = I18N.t('term-hint-cmd') || 'help';
+        }
+    });
+
+    // Hide suggestions on click outside
+    document.addEventListener('click', function(e) {
+        if (!inputLine.contains(e.target)) hideSuggestions();
     });
 
     body.addEventListener('click', function() { input.focus(); });

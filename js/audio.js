@@ -156,6 +156,7 @@
         toggleMute: toggleMute,
         isMuted: function() { return muted; },
         getMuted: function() { return muted; },
+        getCtx: getCtx,
         initMuteButton: updateMuteButton
     };
 

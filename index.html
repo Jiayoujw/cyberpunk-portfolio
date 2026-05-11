@@ -8,6 +8,9 @@
     <meta property="og:description" content="Digital Architect — Code in the Neon Light">
     <meta property="og:type" content="website">
     <meta name="twitter:card" content="summary_large_image">
+    <meta name="theme-color" content="#0a0a0f">
+    <link rel="manifest" href="/manifest.json">
+    <link rel="canonical" href="https://dev.jiayouvibe.com">
     <title data-i18n="title">NEXUS // 赛博作品集</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -376,12 +379,29 @@
         </div>
     </section>
 
+    <!-- ========== GITHUB ACTIVITY ========== -->
+    <section id="github" class="section github-section">
+        <div class="section-header">
+            <span class="section-num">GH</span>
+            <h2 class="section-title glitch" data-i18n="github-title" data-text="// ACTIVITY_LOG" data-i18n-datatext="github-title">// 活动日志</h2>
+            <div class="section-line"></div>
+        </div>
+        <div class="github-container" id="github-container">
+            <div class="github-loading" data-i18n="github-loading">加载贡献数据...</div>
+        </div>
+    </section>
+
     <!-- ========== SKILLS SECTION ========== -->
     <section id="skills" class="section skills-section">
         <div class="section-header">
             <span class="section-num" data-i18n="section-num-3">03</span>
             <h2 class="section-title glitch" data-i18n="skills-title" data-text="// SKILL_MATRIX" data-i18n-datatext="skills-title">// 技能矩阵</h2>
             <div class="section-line"></div>
+        </div>
+
+        <div class="skills-radar-container">
+            <h3 class="skill-cat-title radar-title" data-i18n="radar-title">[能力矩阵]</h3>
+            <canvas id="radar-canvas" width="400" height="400"></canvas>
         </div>
 
         <div class="skills-grid">
@@ -467,6 +487,30 @@
                 <p class="contact-line" data-i18n="contact-line-2">> 通过以下任意渠道发出信号：</p>
             </div>
 
+            <!-- Contact Form -->
+            <form class="contact-form" id="contact-form" action="https://formspree.io/f/your-form-id" method="POST">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label" data-i18n="form-name">名称</label>
+                        <input type="text" name="name" class="form-input" data-i18n-placeholder="form-name-placeholder" placeholder="输入你的代号..." required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" data-i18n="form-email">邮箱</label>
+                        <input type="email" name="email" class="form-input" data-i18n-placeholder="form-email-placeholder" placeholder="你的@邮箱.地址" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" data-i18n="form-message">留言</label>
+                    <textarea name="message" class="form-input form-textarea" rows="4" data-i18n-placeholder="form-message-placeholder" placeholder="在此输入留言..." required></textarea>
+                </div>
+                <div class="form-submit-row">
+                    <button type="submit" class="cyber-btn cyber-btn-secondary">
+                        <span class="cyber-btn-text" data-i18n="form-send">发送信号 >></span>
+                    </button>
+                    <span class="form-status" id="form-status"></span>
+                </div>
+            </form>
+
             <div class="contact-grid">
                 <a href="mailto:hello@nexus.dev" class="contact-card holo-card">
                     <div class="card-corner tl"></div>
@@ -524,13 +568,49 @@
         </div>
     </footer>
 
+    <!-- ========== BACK TO TOP ========== -->
+    <button class="back-to-top" id="back-to-top" title="Back to top">
+        <canvas id="btop-canvas" width="50" height="50"></canvas>
+        <span class="btop-arrow">▲</span>
+    </button>
+
+    <!-- ========== PROJECT MODAL ========== -->
+    <div class="modal-overlay" id="modal-overlay">
+        <div class="modal-panel" id="modal-panel">
+            <button class="modal-close" id="modal-close">[X]</button>
+            <div class="modal-thumb" id="modal-thumb"></div>
+            <h2 class="modal-title" id="modal-title"></h2>
+            <p class="modal-desc" id="modal-desc"></p>
+            <div class="modal-tech" id="modal-tech"></div>
+            <div class="modal-link" id="modal-link"></div>
+        </div>
+    </div>
+
+    <!-- ========== EASTER EGG OVERLAY ========== -->
+    <div class="easter-overlay" id="easter-overlay">
+        <div class="easter-content">
+            <h2 class="easter-title glitch" data-text="ACCESS GRANTED" data-i18n="easter-triggered">访问已授权</h2>
+            <p class="easter-sub" data-i18n="easter-subtitle">阿尔法级权限已解锁</p>
+            <div class="easter-badges" id="easter-badges"></div>
+            <button class="cyber-btn" id="easter-dismiss">
+                <span class="cyber-btn-text">[ CLOSE ]</span>
+            </button>
+        </div>
+    </div>
+
     <!-- ========== SCRIPTS ========== -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="js/i18n.js"></script>
     <script src="js/audio.js"></script>
+    <script src="js/mouse-trail.js"></script>
     <script src="js/matrix.js"></script>
     <script src="js/particles.js"></script>
     <script src="js/terminal.js"></script>
     <script src="js/main.js"></script>
+    <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/sw.js');
+        }
+    </script>
 </body>
 </html>
