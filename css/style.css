@@ -838,6 +838,99 @@ button, input {
     flex-direction: column;
 }
 
+/* Project thumbnail (CSS-generated gradient placeholder) */
+.project-thumb {
+    width: 100%;
+    height: 120px;
+    margin: -2rem -2rem 1.5rem -2rem;
+    width: calc(100% + 4rem);
+    position: relative;
+    overflow: hidden;
+}
+
+.project-thumb::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    opacity: 0.6;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.project-thumb::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+        linear-gradient(45deg, transparent 40%, rgba(0,255,255,0.15) 50%, transparent 60%),
+        linear-gradient(135deg, transparent 30%, rgba(255,0,255,0.1) 50%, transparent 70%);
+    animation: thumb-shimmer 3s ease-in-out infinite;
+}
+
+@keyframes thumb-shimmer {
+    0%, 100% { opacity: 0.5; }
+    50% { opacity: 1; }
+}
+
+/* Per-project thumbnail colors */
+.prj-thumb-1::before {
+    background: linear-gradient(135deg, #003333, #003344, #002233);
+}
+.prj-thumb-2::before {
+    background: linear-gradient(135deg, #330033, #220044, #110033);
+}
+.prj-thumb-3::before {
+    background: linear-gradient(135deg, #333300, #443300, #332200);
+}
+.prj-thumb-4::before {
+    background: linear-gradient(135deg, #003300, #003322, #002211);
+}
+.prj-thumb-5::before {
+    background: linear-gradient(135deg, #330011, #220022, #110022);
+}
+.prj-thumb-6::before {
+    background: linear-gradient(135deg, #331100, #331100, #220000);
+}
+
+.project-card:hover .project-thumb::before {
+    opacity: 0.9;
+    transform: scale(1.05);
+}
+
+/* Geometric accent circles in thumb */
+.project-thumb-geo {
+    position: absolute;
+    border: 1px solid rgba(0,255,255,0.2);
+    border-radius: 50%;
+    pointer-events: none;
+}
+
+.project-thumb-geo:nth-child(1) {
+    width: 60px; height: 60px;
+    top: 20px; right: 30px;
+}
+.project-thumb-geo:nth-child(2) {
+    width: 30px; height: 30px;
+    top: 60px; right: 10px;
+    border-color: rgba(255,0,255,0.3);
+}
+.project-thumb-geo:nth-child(3) {
+    width: 20px; height: 20px;
+    top: 10px; left: 20px;
+    border-color: rgba(255,247,0,0.3);
+}
+
+/* Thumb icon overlay */
+.project-thumb-icon {
+    position: absolute;
+    bottom: 10px;
+    left: 20px;
+    font-family: var(--font-display);
+    font-size: 2rem;
+    font-weight: 900;
+    color: rgba(0,255,255,0.3);
+    letter-spacing: 0.3rem;
+}
+
 .project-id {
     position: absolute;
     top: 1rem;
@@ -986,6 +1079,146 @@ button, input {
     background: var(--color-text-bright);
     box-shadow: 0 0 8px var(--color-text-bright);
     animation: pulse-fast 1s ease-in-out infinite;
+}
+
+/* ===== BLOG TIMELINE ===== */
+.blog-timeline {
+    position: relative;
+    max-width: 800px;
+    margin: 0 auto;
+    padding-left: 2rem;
+}
+
+.blog-timeline::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: linear-gradient(180deg,
+        var(--color-cyan),
+        var(--color-magenta),
+        var(--color-cyan),
+        transparent);
+}
+
+.blog-item {
+    position: relative;
+    margin-bottom: 3rem;
+    padding-left: 2rem;
+    transition: transform 0.3s ease;
+}
+
+.blog-item:hover {
+    transform: translateX(8px);
+}
+
+.blog-item::before {
+    content: '';
+    position: absolute;
+    left: -1.5rem;
+    top: 0.6rem;
+    width: 12px;
+    height: 12px;
+    background: var(--color-cyan);
+    border-radius: 50%;
+    box-shadow: 0 0 10px var(--color-cyan), 0 0 20px var(--color-cyan);
+    transition: all 0.3s ease;
+}
+
+.blog-item:hover::before {
+    background: var(--color-magenta);
+    box-shadow: 0 0 15px var(--color-magenta), 0 0 30px var(--color-magenta);
+    width: 16px;
+    height: 16px;
+    left: -1.7rem;
+}
+
+.blog-date {
+    font-family: var(--font-display);
+    font-size: 0.9rem;
+    color: var(--color-magenta);
+    letter-spacing: 0.15rem;
+    margin-bottom: 0.5rem;
+    text-shadow: 0 0 5px var(--color-magenta);
+}
+
+.blog-item-title {
+    font-family: var(--font-display);
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--color-text-bright);
+    margin-bottom: 0.5rem;
+    letter-spacing: 0.05rem;
+}
+
+.blog-item:hover .blog-item-title {
+    color: var(--color-cyan);
+    text-shadow: 0 0 10px var(--color-cyan);
+}
+
+.blog-excerpt {
+    color: var(--color-text);
+    font-size: 0.9rem;
+    line-height: 1.6;
+    margin-bottom: 0.75rem;
+}
+
+.blog-readmore {
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    color: var(--color-cyan);
+    letter-spacing: 0.1rem;
+    opacity: 0.7;
+    transition: opacity 0.3s ease;
+}
+
+.blog-item:hover .blog-readmore {
+    opacity: 1;
+    text-shadow: 0 0 8px var(--color-cyan);
+}
+
+/* ===== VISITOR COUNTER ===== */
+.visitor-counter {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 1rem;
+}
+
+.visitor-label {
+    font-family: var(--font-display);
+    font-size: 0.85rem;
+    color: var(--color-text-dim);
+    letter-spacing: 0.15rem;
+}
+
+.visitor-number {
+    font-family: 'Orbitron', 'Courier New', monospace;
+    font-size: 1.2rem;
+    font-weight: 900;
+    color: var(--color-yellow);
+    text-shadow: 0 0 10px var(--color-yellow);
+    letter-spacing: 0.15rem;
+    background: rgba(255, 247, 0, 0.05);
+    border: 1px solid rgba(255, 247, 0, 0.3);
+    padding: 0.2rem 0.8rem;
+}
+
+/* ===== RESUME BUTTON ===== */
+.cyber-btn-resume {
+    border-color: var(--color-yellow);
+    color: var(--color-yellow);
+}
+
+.cyber-btn-resume::before {
+    background: linear-gradient(90deg, transparent, rgba(255,247,0,0.2), transparent);
+}
+
+.cyber-btn-resume:hover {
+    background: rgba(255,247,0,0.1);
+    box-shadow: 0 0 20px rgba(255,247,0,0.5);
 }
 
 /* ===== TERMINAL ===== */

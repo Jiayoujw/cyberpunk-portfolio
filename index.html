@@ -56,11 +56,13 @@
             <a href="#home" data-text="HOME" class="nav-link active" data-i18n="nav-home" data-i18n-datatext="nav-home">首页</a>
             <a href="#about" data-text="ABOUT" class="nav-link" data-i18n="nav-about" data-i18n-datatext="nav-about">关于</a>
             <a href="#projects" data-text="PROJECTS" class="nav-link" data-i18n="nav-projects" data-i18n-datatext="nav-projects">项目</a>
+            <a href="#blog" data-text="BLOG" class="nav-link" data-i18n="nav-blog" data-i18n-datatext="nav-blog">博客</a>
             <a href="#skills" data-text="SKILLS" class="nav-link" data-i18n="nav-skills" data-i18n-datatext="nav-skills">技能</a>
             <a href="#terminal" data-text="TERMINAL" class="nav-link" data-i18n="nav-terminal" data-i18n-datatext="nav-terminal">终端</a>
             <a href="#contact" data-text="CONTACT" class="nav-link" data-i18n="nav-contact" data-i18n-datatext="nav-contact">联系</a>
         </nav>
         <div class="hud-right">
+            <button class="lang-toggle" id="audio-toggle" title="Toggle Sound">[♪ OFF]</button>
             <button class="lang-toggle" id="lang-toggle" title="Switch Language / 切换语言">中文</button>
             <span class="hud-divider">//</span>
             <span class="hud-time" id="hud-time">00:00:00</span>
@@ -114,6 +116,10 @@
                     <a href="#terminal" class="cyber-btn cyber-btn-secondary">
                         <span class="cyber-btn-glitch"></span>
                         <span class="cyber-btn-text" data-i18n="btn-terminal">启动终端 [-]</span>
+                    </a>
+                    <a href="assets/resume.pdf" class="cyber-btn cyber-btn-resume" download>
+                        <span class="cyber-btn-glitch"></span>
+                        <span class="cyber-btn-text" data-i18n="btn-resume">下载简历 >></span>
                     </a>
                 </div>
             </div>
@@ -190,8 +196,13 @@
                 <div class="card-corner bl"></div>
                 <div class="card-corner br"></div>
                 <div class="card-scan"></div>
+                <div class="project-thumb prj-thumb-1">
+                    <div class="project-thumb-geo"></div>
+                    <div class="project-thumb-geo"></div>
+                    <div class="project-thumb-geo"></div>
+                    <div class="project-thumb-icon">{ }</div>
+                </div>
                 <div class="project-id">PRJ_001</div>
-                <div class="project-icon">{ }</div>
                 <h3 class="project-title" data-i18n="prj-1-title">神经网络</h3>
                 <p class="project-desc" data-i18n="prj-1-desc">AI驱动的神经网络可视化平台，支持实时训练指标监控和3D模型架构渲染。</p>
                 <div class="project-tech">
@@ -208,8 +219,13 @@
                 <div class="card-corner bl"></div>
                 <div class="card-corner br"></div>
                 <div class="card-scan"></div>
+                <div class="project-thumb prj-thumb-2">
+                    <div class="project-thumb-geo"></div>
+                    <div class="project-thumb-geo"></div>
+                    <div class="project-thumb-geo"></div>
+                    <div class="project-thumb-icon">&lt;/&gt;</div>
+                </div>
                 <div class="project-id">PRJ_002</div>
-                <div class="project-icon">&lt;/&gt;</div>
                 <h3 class="project-title" data-i18n="prj-2-title">赛博仪表盘</h3>
                 <p class="project-desc" data-i18n="prj-2-desc">实时数据仪表盘，集成WebSocket流式传输、粒子特效和全息UI组件，灵感来自科幻界面。</p>
                 <div class="project-tech">
@@ -226,8 +242,13 @@
                 <div class="card-corner bl"></div>
                 <div class="card-corner br"></div>
                 <div class="card-scan"></div>
+                <div class="project-thumb prj-thumb-3">
+                    <div class="project-thumb-geo"></div>
+                    <div class="project-thumb-geo"></div>
+                    <div class="project-thumb-geo"></div>
+                    <div class="project-thumb-icon">[#]</div>
+                </div>
                 <div class="project-id">PRJ_003</div>
-                <div class="project-icon">[#]</div>
                 <h3 class="project-title" data-i18n="prj-3-title">链上保险库</h3>
                 <p class="project-desc" data-i18n="prj-3-desc">去中心化存储协议，端到端加密、零知识证明，配以炫目的毛玻璃风格界面。</p>
                 <div class="project-tech">
@@ -244,8 +265,13 @@
                 <div class="card-corner bl"></div>
                 <div class="card-corner br"></div>
                 <div class="card-scan"></div>
+                <div class="project-thumb prj-thumb-4">
+                    <div class="project-thumb-geo"></div>
+                    <div class="project-thumb-geo"></div>
+                    <div class="project-thumb-geo"></div>
+                    <div class="project-thumb-icon">[*]</div>
+                </div>
                 <div class="project-id">PRJ_004</div>
-                <div class="project-icon">[*]</div>
                 <h3 class="project-title" data-i18n="prj-4-title">像素锻造</h3>
                 <p class="project-desc" data-i18n="prj-4-desc">生成艺术工作室，利用程序化算法、流体模拟和着色器魔法创造独特的数字艺术作品。</p>
                 <div class="project-tech">
@@ -262,8 +288,13 @@
                 <div class="card-corner bl"></div>
                 <div class="card-corner br"></div>
                 <div class="card-scan"></div>
+                <div class="project-thumb prj-thumb-5">
+                    <div class="project-thumb-geo"></div>
+                    <div class="project-thumb-geo"></div>
+                    <div class="project-thumb-geo"></div>
+                    <div class="project-thumb-icon">[$]</div>
+                </div>
                 <div class="project-id">PRJ_005</div>
-                <div class="project-icon">[$]</div>
                 <h3 class="project-title" data-i18n="prj-5-title">幽灵协议</h3>
                 <p class="project-desc" data-i18n="prj-5-desc">隐私优先的通讯应用，量子抗性加密、自毁消息，搭配粗野主义赛博朋克UI。</p>
                 <div class="project-tech">
@@ -280,8 +311,13 @@
                 <div class="card-corner bl"></div>
                 <div class="card-corner br"></div>
                 <div class="card-scan"></div>
+                <div class="project-thumb prj-thumb-6">
+                    <div class="project-thumb-geo"></div>
+                    <div class="project-thumb-geo"></div>
+                    <div class="project-thumb-geo"></div>
+                    <div class="project-thumb-icon">[?]</div>
+                </div>
                 <div class="project-id">PRJ_006</div>
-                <div class="project-icon">[?]</div>
                 <h3 class="project-title" data-i18n="prj-6-title">AI神谕</h3>
                 <p class="project-desc" data-i18n="prj-6-desc">对话式AI界面，集成语音合成、实时情绪分析，全息3D形象根据用户输入做出反应。</p>
                 <div class="project-tech">
@@ -291,6 +327,52 @@
                 </div>
                 <div class="project-link"><span data-i18n="prj-link">访问节点 >></span></div>
             </article>
+        </div>
+    </section>
+
+    <!-- ========== BLOG SECTION ========== -->
+    <section id="blog" class="section blog-section">
+        <div class="section-header">
+            <span class="section-num blog-section-label" data-i18n="blog-section-label">BLOG</span>
+            <h2 class="section-title glitch" data-i18n="blog-title" data-text="// ARCHIVE" data-i18n-datatext="blog-title">// 技术动态</h2>
+            <div class="section-line"></div>
+        </div>
+
+        <div class="blog-timeline">
+            <div class="blog-item">
+                <div class="blog-date" data-i18n="blog-item-1-date">2026.04</div>
+                <h3 class="blog-item-title" data-i18n="blog-item-1-title">构建实时神经网络可视化</h3>
+                <p class="blog-excerpt" data-i18n="blog-item-1-desc">如何使用 Three.js 和 WebSocket 流式传输构建 3D 神经网络可视化平台。</p>
+                <span class="blog-readmore" data-i18n="blog-readmore">阅读更多 >></span>
+            </div>
+
+            <div class="blog-item">
+                <div class="blog-date" data-i18n="blog-item-2-date">2026.03</div>
+                <h3 class="blog-item-title" data-i18n="blog-item-2-title">赛博朋克 UI 设计之道</h3>
+                <p class="blog-excerpt" data-i18n="blog-item-2-desc">设计充满霓虹光影、富有生命力的界面——经验与教训。</p>
+                <span class="blog-readmore" data-i18n="blog-readmore">阅读更多 >></span>
+            </div>
+
+            <div class="blog-item">
+                <div class="blog-date" data-i18n="blog-item-3-date">2026.02</div>
+                <h3 class="blog-item-title" data-i18n="blog-item-3-title">前端开发者的零知识证明入门</h3>
+                <p class="blog-excerpt" data-i18n="blog-item-3-desc">理解零知识证明并在 Web 应用中实践——一份实用指南。</p>
+                <span class="blog-readmore" data-i18n="blog-readmore">阅读更多 >></span>
+            </div>
+
+            <div class="blog-item">
+                <div class="blog-date" data-i18n="blog-item-4-date">2026.01</div>
+                <h3 class="blog-item-title" data-i18n="blog-item-4-title">Rust + WebAssembly: Web 性能的未来</h3>
+                <p class="blog-excerpt" data-i18n="blog-item-4-desc">将计算密集型模块移植到 WASM，获得 10 倍性能提升。</p>
+                <span class="blog-readmore" data-i18n="blog-readmore">阅读更多 >></span>
+            </div>
+
+            <div class="blog-item">
+                <div class="blog-date" data-i18n="blog-item-5-date">2025.12</div>
+                <h3 class="blog-item-title" data-i18n="blog-item-5-title">WebGL 着色器生成艺术</h3>
+                <p class="blog-excerpt" data-i18n="blog-item-5-desc">在 GPU 上创建实时流体模拟和分形图案。</p>
+                <span class="blog-readmore" data-i18n="blog-readmore">阅读更多 >></span>
+            </div>
         </div>
     </section>
 
@@ -430,6 +512,10 @@
                 <span data-i18n="footer-center">© 2077 NEXUS // 版权所有</span>
             </div>
             <div class="footer-right">
+                <div class="visitor-counter">
+                    <span class="visitor-label" data-i18n="visitor-label">访客</span>
+                    <span class="visitor-number" id="visitor-number">#0000</span>
+                </div>
                 <span class="footer-status">
                     <span class="status-dot"></span>
                     <span data-i18n="footer-status">系统运行中</span>
@@ -441,6 +527,7 @@
     <!-- ========== SCRIPTS ========== -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="js/i18n.js"></script>
+    <script src="js/audio.js"></script>
     <script src="js/matrix.js"></script>
     <script src="js/particles.js"></script>
     <script src="js/terminal.js"></script>

@@ -51,6 +51,7 @@ const I18N = {
             'meta-value-3': 'ENABLED',
             'btn-projects': 'VIEW_PROJECTS >>',
             'btn-terminal': 'RUN_TERMINAL [-]',
+            'btn-resume': 'DOWNLOAD_CV >>',
             'scroll-down': 'SCROLL_DOWN',
 
             // --- Typewriter ---
@@ -88,6 +89,27 @@ const I18N = {
             'prj-6-desc': 'Conversational AI interface with voice synthesis, real-time emotion analysis, and a holographic 3D avatar that responds to user input.',
             'prj-link': 'ACCESS_NODE >>',
 
+            // --- Blog ---
+            'nav-blog': 'BLOG',
+            'blog-title': '// ARCHIVE',
+            'blog-item-1-date': '2026.04',
+            'blog-item-1-title': 'Building a Real-time Neural Visualization',
+            'blog-item-1-desc': 'How we built a 3D neural network visualizer with Three.js and WebSocket streaming.',
+            'blog-item-2-date': '2026.03',
+            'blog-item-2-title': 'The Art of Cyberpunk UI Design',
+            'blog-item-2-desc': 'Lessons learned from designing neon-drenched interfaces that feel alive.',
+            'blog-item-3-date': '2026.02',
+            'blog-item-3-title': 'Zero-Knowledge Proofs for Frontend Devs',
+            'blog-item-3-desc': 'A practical guide to understanding and implementing ZK proofs in web apps.',
+            'blog-item-4-date': '2026.01',
+            'blog-item-4-title': 'Rust + WebAssembly: The Future of Web Perf',
+            'blog-item-4-desc': 'Porting computation-heavy modules to WASM for 10x performance gains.',
+            'blog-item-5-date': '2025.12',
+            'blog-item-5-title': 'Generative Art with WebGL Shaders',
+            'blog-item-5-desc': 'Creating real-time fluid simulations and fractal patterns on the GPU.',
+            'blog-readmore': 'READ_MORE >>',
+            'blog-section-label': 'BLOG',
+
             // --- Skills ---
             'section-num-3': '03',
             'skills-title': '// SKILL_MATRIX',
@@ -118,6 +140,10 @@ const I18N = {
             'footer-center': '© 2077 NEXUS // ALL_RIGHTS_RESERVED',
             'footer-status': 'SYSTEM_OPERATIONAL',
 
+            // --- Audio & Visitor ---
+            'audio-toggle-title': 'Toggle Sound',
+            'visitor-label': 'VISITOR',
+
             // --- Konami ---
             'konami-title': 'KONAMI MODE ACTIVATED',
             'konami-sub': '+30 STYLE POINTS',
@@ -146,6 +172,12 @@ const I18N = {
             'cmd-echo-desc': 'Display a message',
             'cmd-theme-desc': 'Cycle accent color',
             'cmd-banner-desc': 'Show ASCII banner',
+            'cmd-snake-desc': 'Play Snake game',
+
+            'term-snake-ready': '[SNAKE] Press ENTER to start. WASD to move.',
+            'term-snake-over': '[SNAKE] GAME OVER! Score: ',
+            'term-snake-escape': '[SNAKE] Game escaped. Type snake to play again.',
+            'term-snake-win': '[SNAKE] WINNER! Perfect score: ',
 
             'term-welcome-title': '   NEXUS TERMINAL [v2.077.1] — encrypted',
             'term-welcome-copy': '   © 2077 N3X.OS — All rights reserved',
@@ -289,6 +321,7 @@ const I18N = {
             'meta-value-3': '已启用',
             'btn-projects': '查看项目 >>',
             'btn-terminal': '启动终端 [-]',
+            'btn-resume': '下载简历 >>',
             'scroll-down': '向下滚动',
 
             // --- Typewriter ---
@@ -326,6 +359,27 @@ const I18N = {
             'prj-6-desc': '对话式AI界面，集成语音合成、实时情绪分析，全息3D形象根据用户输入做出反应。',
             'prj-link': '访问节点 >>',
 
+            // --- Blog ---
+            'nav-blog': '博客',
+            'blog-title': '// 技术动态',
+            'blog-item-1-date': '2026.04',
+            'blog-item-1-title': '构建实时神经网络可视化',
+            'blog-item-1-desc': '如何使用 Three.js 和 WebSocket 流式传输构建 3D 神经网络可视化平台。',
+            'blog-item-2-date': '2026.03',
+            'blog-item-2-title': '赛博朋克 UI 设计之道',
+            'blog-item-2-desc': '设计充满霓虹光影、富有生命力的界面——经验与教训。',
+            'blog-item-3-date': '2026.02',
+            'blog-item-3-title': '前端开发者的零知识证明入门',
+            'blog-item-3-desc': '理解零知识证明并在 Web 应用中实践——一份实用指南。',
+            'blog-item-4-date': '2026.01',
+            'blog-item-4-title': 'Rust + WebAssembly: Web 性能的未来',
+            'blog-item-4-desc': '将计算密集型模块移植到 WASM，获得 10 倍性能提升。',
+            'blog-item-5-date': '2025.12',
+            'blog-item-5-title': 'WebGL 着色器生成艺术',
+            'blog-item-5-desc': '在 GPU 上创建实时流体模拟和分形图案。',
+            'blog-readmore': '阅读更多 >>',
+            'blog-section-label': '博客',
+
             // --- Skills ---
             'section-num-3': '03',
             'skills-title': '// 技能矩阵',
@@ -356,6 +410,10 @@ const I18N = {
             'footer-center': '© 2077 NEXUS // 版权所有',
             'footer-status': '系统运行中',
 
+            // --- Audio & Visitor ---
+            'audio-toggle-title': '切换音效',
+            'visitor-label': '访客',
+
             // --- Konami ---
             'konami-title': '科乐美模式已激活',
             'konami-sub': '+30 酷炫点数',
@@ -384,6 +442,12 @@ const I18N = {
             'cmd-echo-desc': '回显消息',
             'cmd-theme-desc': '切换主题配色',
             'cmd-banner-desc': '显示ASCII横幅',
+            'cmd-snake-desc': '玩贪吃蛇游戏',
+
+            'term-snake-ready': '[贪吃蛇] 按 ENTER 开始，WASD 移动。',
+            'term-snake-over': '[贪吃蛇] 游戏结束！得分: ',
+            'term-snake-escape': '[贪吃蛇] 已退出。输入 snake 再来一局。',
+            'term-snake-win': '[贪吃蛇] 恭喜！满分: ',
 
             'term-welcome-title': '   NEXUS 终端 [v2.077.1] — 已加密',
             'term-welcome-copy': '   © 2077 N3X.OS — 版权所有',

@@ -76,6 +76,7 @@
     // ============================================================
     function initInteractions() {
         initLangToggle();
+        initAudioToggle();
         initCursor();
         initClock();
         initTypewriter();
@@ -86,6 +87,9 @@
         initProjectTilt();
         initHoverEffects();
         initHeroFrameTilt();
+        initAudioHooks();
+        initVisitorCounter();
+        initPageTransitions();
     }
 
     // ============================================================
@@ -99,6 +103,96 @@
             var next = I18N.getLang() === 'zh' ? 'en' : 'zh';
             I18N.setLanguage(next);
             restartTypewriter();
+        });
+    }
+
+    // ============================================================
+    // AUDIO TOGGLE
+    // ============================================================
+    function initAudioToggle() {
+        var btn = document.getElementById('audio-toggle');
+        if (!btn) return;
+
+        NexusAudio.initMuteButton();
+        btn.addEventListener('click', function() {
+            NexusAudio.toggleMute();
+        });
+    }
+
+    // ============================================================
+    // AUDIO HOOKS (hover/click sounds)
+    // ============================================================
+    function initAudioHooks() {
+        // Hover sound on cards and links
+        var hoverables = document.querySelectorAll('a, button, .holo-card, .project-card, .contact-card');
+        hoverables.forEach(function(el) {
+            el.addEventListener('mouseenter', function() { NexusAudio.hoverSweep(); });
+        });
+
+        // Click sound on buttons
+        var clickables = document.querySelectorAll('.cyber-btn, .lang-toggle, #audio-toggle, .contact-card, .nav-link');
+        clickables.forEach(function(el) {
+            el.addEventListener('click', function() { NexusAudio.clickThud(); });
+        });
+
+        // Terminal key blip is handled in terminal.js
+    }
+
+    // ============================================================
+    // VISITOR COUNTER
+    // ============================================================
+    function initVisitorCounter() {
+        var el = document.getElementById('visitor-number');
+        if (!el) return;
+
+        var key = 'nexus-visitor-count';
+        var base = 1337;
+        if (!localStorage.getItem('nexus-visited')) {
+            localStorage.setItem('nexus-visited', '1');
+            var globalCount = parseInt(localStorage.getItem(key) || '0', 10) + 1;
+            localStorage.setItem(key, globalCount);
+        }
+        var count = parseInt(localStorage.getItem(key) || '0', 10);
+        count = count || 1;
+        var display = base + count;
+        el.textContent = '#' + String(display).padStart(4, '0');
+    }
+
+    // ============================================================
+    // PAGE TRANSITIONS
+    // ============================================================
+    function initPageTransitions() {
+        var overlay = document.getElementById('page-transition-overlay');
+        if (!overlay) {
+            overlay = document.createElement('div');
+            overlay.className = 'page-transition-overlay';
+            overlay.id = 'page-transition-overlay';
+            document.body.appendChild(overlay);
+        }
+
+        var navLinks = document.querySelectorAll('.nav-link');
+        navLinks.forEach(function(link) {
+            link.addEventListener('click', function(e) {
+                var href = link.getAttribute('href');
+                if (href && href.startsWith('#')) {
+                    var target = document.querySelector(href);
+                    if (target) {
+                        e.preventDefault();
+                        // Trigger overlay
+                        overlay.classList.add('active');
+                        var dir = target.getBoundingClientRect().top > window.scrollY ? 1 : -1;
+                        NexusAudio.navSwoosh(dir);
+                        setTimeout(function() {
+                            target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                            target.classList.add('section-entering');
+                            setTimeout(function() {
+                                target.classList.remove('section-entering');
+                                overlay.classList.remove('active');
+                            }, 600);
+                        }, 150);
+                    }
+                }
+            });
         });
     }
 
@@ -284,19 +378,6 @@
             }
         });
         updateActive();
-
-        links.forEach(function(link) {
-            link.addEventListener('click', function(e) {
-                var href = link.getAttribute('href');
-                if (href && href.startsWith('#')) {
-                    var target = document.querySelector(href);
-                    if (target) {
-                        e.preventDefault();
-                        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                    }
-                }
-            });
-        });
     }
 
     // ============================================================

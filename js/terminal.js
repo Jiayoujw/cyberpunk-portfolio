@@ -257,6 +257,10 @@
                     return '<span class="out-success">' + t('term-theme-switch') + ' #' + (next + 1) + '</span>';
                 }
             },
+            snake: {
+                desc: t('cmd-snake-desc'),
+                run: function() { startSnakeGame(); return ''; }
+            },
             banner: {
                 desc: t('cmd-banner-desc'),
                 run: function() {
@@ -274,6 +278,124 @@
                 }
             }
         };
+    }
+
+    // ===== SNAKE GAME =====
+    var snakeInterval = null;
+    var snakeState = null;
+
+    function startSnakeGame() {
+        var t = I18N.t.bind(I18N);
+        var W = 20, H = 12;
+        var snake = [{x:5,y:Math.floor(H/2)}];
+        var dir = {x:1,y:0};
+        var nextDir = {x:1,y:0};
+        var food = spawnFood(snake, W, H);
+        var score = 0;
+        var gameOver = false;
+
+        function spawnFood(s, w, h) {
+            var f;
+            do { f = {x:Math.floor(Math.random()*w), y:Math.floor(Math.random()*h)}; }
+            while (s.some(function(p){return p.x===f.x&&p.y===f.y;}));
+            return f;
+        }
+
+        var container = document.createElement('div');
+        container.style.cssText = 'font-family:monospace;line-height:1.2;color:var(--color-green);';
+        var statusLine = document.createElement('div');
+        container.appendChild(statusLine);
+        var grid = document.createElement('pre');
+        grid.style.cssText = 'margin:0;line-height:1.3;letter-spacing:0.2rem;';
+        container.appendChild(grid);
+        addLine('');
+        output.appendChild(container);
+        body.scrollTop = body.scrollHeight;
+
+        // Instructions
+        statusLine.innerHTML = '<span class="out-info">' + t('term-snake-ready') + '</span>';
+
+        function render() {
+            var board = [];
+            for (var y = 0; y < H; y++) {
+                var row = '';
+                for (var x = 0; x < W; x++) {
+                    var isSnake = snake.some(function(p){return p.x===x&&p.y===y;});
+                    var isHead = snake[snake.length-1].x===x && snake[snake.length-1].y===y;
+                    var isFood = food.x===x && food.y===y;
+                    if (isHead) row += '◈';
+                    else if (isSnake) row += '◆';
+                    else if (isFood) row += '<span style="color:var(--color-magenta)">●</span>';
+                    else row += '·';
+                }
+                board.push(row);
+            }
+            grid.innerHTML = board.join('\n');
+            statusLine.innerHTML = '<span class="out-info">[SNAKE] Score: ' + score + '</span>';
+        }
+
+        function tick() {
+            if (gameOver) return;
+            dir = {x:nextDir.x, y:nextDir.y};
+            var head = snake[snake.length-1];
+            var newHead = {x:head.x+dir.x, y:head.y+dir.y};
+
+            if (newHead.x < 0 || newHead.x >= W || newHead.y < 0 || newHead.y >= H ||
+                snake.some(function(p){return p.x===newHead.x&&p.y===newHead.y;})) {
+                gameOver = true;
+                clearInterval(snakeInterval);
+                statusLine.innerHTML = '<span class="out-error">' + t('term-snake-over') + score + '</span>';
+                if (score === W*H - 1) {
+                    statusLine.innerHTML = '<span class="out-success">' + t('term-snake-win') + score + '</span>';
+                }
+                return;
+            }
+
+            snake.push(newHead);
+            if (newHead.x === food.x && newHead.y === food.y) {
+                score++;
+                NexusAudio.clickThud();
+                food = spawnFood(snake, W, H);
+            } else {
+                snake.shift();
+            }
+            render();
+            body.scrollTop = body.scrollHeight;
+        }
+
+        // Key handler for snake
+        function snakeKeyHandler(e) {
+            if (e.key === 'Enter' && !snakeInterval) {
+                e.preventDefault();
+                snakeInterval = setInterval(tick, 100);
+                render();
+                return;
+            }
+            if (e.key === 'Escape') {
+                clearInterval(snakeInterval);
+                gameOver = true;
+                input.value = '';
+                statusLine.innerHTML = '<span class="out-info">' + t('term-snake-escape') + '</span>';
+                document.removeEventListener('keydown', snakeKeyHandler);
+                input.focus();
+                return;
+            }
+            var keyMap = {w:{x:0,y:-1},a:{x:-1,y:0},s:{x:0,y:1},d:{x:1,y:0},
+                          ArrowUp:{x:0,y:-1},ArrowLeft:{x:-1,y:0},ArrowDown:{x:0,y:1},ArrowRight:{x:1,y:0}};
+            var d = keyMap[e.key.toLowerCase()];
+            if (d && !(d.x === -dir.x && d.y === -dir.y)) {
+                e.preventDefault();
+                nextDir = d;
+                NexusAudio.keyBlip();
+            }
+        }
+
+        document.addEventListener('keydown', snakeKeyHandler);
+        render();
+
+        // Cleanup happens when user presses Escape or game over
+        // Input focus stays on game
+        setTimeout(function() { input.blur(); }, 50);
     }
 
     // ===== Show welcome =====
@@ -318,6 +440,7 @@
 
     // ===== Input handling =====
     input.addEventListener('keydown', function(e) {
+        NexusAudio.keyBlip();
         if (e.key === 'Enter') {
             e.preventDefault();
             var value = input.value;
