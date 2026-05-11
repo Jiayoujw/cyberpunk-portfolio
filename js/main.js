@@ -690,8 +690,7 @@
     // ============================================================
     function initWindowManager() {
         if (!window.NexusWM) return;
-        // Wrap existing terminal into a window
-        window.NexusWM.createTerminalWindow();
+        // Window manager initialized — floating windows available via terminal commands
     }
 
     // ============================================================
