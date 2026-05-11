@@ -51,7 +51,6 @@ const I18N = {
             'meta-value-3': 'ENABLED',
             'btn-projects': 'VIEW_PROJECTS >>',
             'btn-terminal': 'RUN_TERMINAL [-]',
-            'btn-resume': 'DOWNLOAD_CV >>',
             'scroll-down': 'SCROLL_DOWN',
 
             // --- Typewriter ---
@@ -402,7 +401,6 @@ const I18N = {
             'meta-value-3': '已启用',
             'btn-projects': '查看项目 >>',
             'btn-terminal': '启动终端 [-]',
-            'btn-resume': '下载简历 >>',
             'scroll-down': '向下滚动',
 
             // --- Typewriter ---

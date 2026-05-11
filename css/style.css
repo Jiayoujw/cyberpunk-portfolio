@@ -1206,20 +1206,7 @@ button, input {
     padding: 0.2rem 0.8rem;
 }
 
-/* ===== RESUME BUTTON ===== */
-.cyber-btn-resume {
-    border-color: var(--color-yellow);
-    color: var(--color-yellow);
-}
 
-.cyber-btn-resume::before {
-    background: linear-gradient(90deg, transparent, rgba(255,247,0,0.2), transparent);
-}
-
-.cyber-btn-resume:hover {
-    background: rgba(255,247,0,0.1);
-    box-shadow: 0 0 20px rgba(255,247,0,0.5);
-}
 
 /* ===== TERMINAL ===== */
 .terminal-window {
