@@ -3,8 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Cyberpunk Portfolio - Code in the Neon Light">
-    <title>NEXUS // CYBER PORTFOLIO</title>
+    <meta name="description" content="Cyberpunk Portfolio — Code in the Neon Light">
+    <meta property="og:title" content="NEXUS // CYBER PORTFOLIO">
+    <meta property="og:description" content="Digital Architect — Code in the Neon Light">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary_large_image">
+    <title data-i18n="title">NEXUS // 赛博作品集</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -45,21 +49,23 @@
             <span class="hud-divider">//</span>
             <span class="hud-status">
                 <span class="status-dot"></span>
-                ONLINE
+                <span data-i18n="hud-status">在线</span>
             </span>
         </div>
         <nav class="hud-nav">
-            <a href="#home" data-text="HOME" class="nav-link active">HOME</a>
-            <a href="#about" data-text="ABOUT" class="nav-link">ABOUT</a>
-            <a href="#projects" data-text="PROJECTS" class="nav-link">PROJECTS</a>
-            <a href="#skills" data-text="SKILLS" class="nav-link">SKILLS</a>
-            <a href="#terminal" data-text="TERMINAL" class="nav-link">TERMINAL</a>
-            <a href="#contact" data-text="CONTACT" class="nav-link">CONTACT</a>
+            <a href="#home" data-text="HOME" class="nav-link active" data-i18n="nav-home" data-i18n-datatext="nav-home">首页</a>
+            <a href="#about" data-text="ABOUT" class="nav-link" data-i18n="nav-about" data-i18n-datatext="nav-about">关于</a>
+            <a href="#projects" data-text="PROJECTS" class="nav-link" data-i18n="nav-projects" data-i18n-datatext="nav-projects">项目</a>
+            <a href="#skills" data-text="SKILLS" class="nav-link" data-i18n="nav-skills" data-i18n-datatext="nav-skills">技能</a>
+            <a href="#terminal" data-text="TERMINAL" class="nav-link" data-i18n="nav-terminal" data-i18n-datatext="nav-terminal">终端</a>
+            <a href="#contact" data-text="CONTACT" class="nav-link" data-i18n="nav-contact" data-i18n-datatext="nav-contact">联系</a>
         </nav>
         <div class="hud-right">
+            <button class="lang-toggle" id="lang-toggle" title="Switch Language / 切换语言">中文</button>
+            <span class="hud-divider">//</span>
             <span class="hud-time" id="hud-time">00:00:00</span>
             <span class="hud-divider">//</span>
-            <span class="hud-coords" id="hud-coords">N 35.6° / E 139.7°</span>
+            <span class="hud-coords" id="hud-coords">北纬 35.6° / 东经 139.7°</span>
         </div>
     </header>
 
@@ -72,11 +78,11 @@
             <div class="frame-corner br"></div>
 
             <div class="hero-content">
-                <div class="hero-tag">[ SYS_USER://NEXUS ]</div>
+                <div class="hero-tag" data-i18n="hero-tag">[ SYS_USER://NEXUS ]</div>
 
                 <h1 class="hero-title">
-                    <span class="glitch" data-text="DIGITAL">DIGITAL</span>
-                    <span class="glitch hero-accent" data-text="ARCHITECT">ARCHITECT</span>
+                    <span class="glitch" data-i18n="hero-title-1" data-text="DIGITAL" data-i18n-datatext="hero-title-1">数字</span>
+                    <span class="glitch hero-accent" data-i18n="hero-title-2" data-text="ARCHITECT" data-i18n-datatext="hero-title-2">建筑师</span>
                 </h1>
 
                 <div class="hero-subtitle">
@@ -87,34 +93,34 @@
 
                 <div class="hero-meta">
                     <div class="meta-item">
-                        <span class="meta-label">CODE_LEVEL:</span>
+                        <span class="meta-label" data-i18n="meta-label-1">代码等级:</span>
                         <span class="meta-value">99.9%</span>
                     </div>
                     <div class="meta-item">
-                        <span class="meta-label">NEURAL_LINK:</span>
-                        <span class="meta-value">ACTIVE</span>
+                        <span class="meta-label" data-i18n="meta-label-2">神经链接:</span>
+                        <span class="meta-value" data-i18n="meta-value-2">已激活</span>
                     </div>
                     <div class="meta-item">
-                        <span class="meta-label">ENCRYPTION:</span>
-                        <span class="meta-value">ENABLED</span>
+                        <span class="meta-label" data-i18n="meta-label-3">加密状态:</span>
+                        <span class="meta-value" data-i18n="meta-value-3">已启用</span>
                     </div>
                 </div>
 
                 <div class="hero-actions">
                     <a href="#projects" class="cyber-btn">
                         <span class="cyber-btn-glitch"></span>
-                        <span class="cyber-btn-text">VIEW_PROJECTS &gt;&gt;</span>
+                        <span class="cyber-btn-text" data-i18n="btn-projects">查看项目 >></span>
                     </a>
                     <a href="#terminal" class="cyber-btn cyber-btn-secondary">
                         <span class="cyber-btn-glitch"></span>
-                        <span class="cyber-btn-text">RUN_TERMINAL [-]</span>
+                        <span class="cyber-btn-text" data-i18n="btn-terminal">启动终端 [-]</span>
                     </a>
                 </div>
             </div>
         </div>
 
         <div class="scroll-indicator">
-            <span>SCROLL_DOWN</span>
+            <span data-i18n="scroll-down">向下滚动</span>
             <div class="scroll-arrow"></div>
         </div>
     </section>
@@ -122,8 +128,8 @@
     <!-- ========== ABOUT SECTION ========== -->
     <section id="about" class="section about-section">
         <div class="section-header">
-            <span class="section-num">01</span>
-            <h2 class="section-title glitch" data-text="// ABOUT_ME">// ABOUT_ME</h2>
+            <span class="section-num" data-i18n="section-num-1">01</span>
+            <h2 class="section-title glitch" data-i18n="about-title" data-text="// ABOUT_ME" data-i18n-datatext="about-title">// 关于我</h2>
             <div class="section-line"></div>
         </div>
 
@@ -135,16 +141,9 @@
                 <div class="card-corner br"></div>
                 <div class="card-scan"></div>
 
-                <h3 class="card-title">WHO_AM_I</h3>
-                <p class="card-text">
-                    Full-stack developer operating in the neon-lit shadows of the digital realm.
-                    Crafting interactive experiences where code meets art. Specialized in building
-                    high-performance web applications with cutting-edge technologies.
-                </p>
-                <p class="card-text">
-                    一个游走在代码与艺术之间的开发者。擅长打造具有视觉冲击力的网络体验，
-                    沉迷于像素与霓虹的交响。
-                </p>
+                <h3 class="card-title" data-i18n="about-who">我是谁</h3>
+                <p class="card-text" data-i18n="about-text-1">一个游走在代码与艺术之间的开发者。擅长打造具有视觉冲击力的网络体验，沉迷于像素与霓虹的交响。专注于使用前沿技术构建高性能的 Web 应用，在数字世界的霓虹阴影中穿梭。</p>
+                <p class="card-text" data-i18n="about-text-2">Full-stack developer operating in the neon-lit shadows of the digital realm. Crafting interactive experiences where code meets art. Specialized in building high-performance web applications with cutting-edge technologies.</p>
             </div>
 
             <div class="about-stats">
@@ -152,25 +151,25 @@
                     <div class="card-corner tl"></div>
                     <div class="card-corner br"></div>
                     <div class="stat-num" data-target="50">0</div>
-                    <div class="stat-label">PROJECTS_DONE</div>
+                    <div class="stat-label" data-i18n="stat-label-1">已完成项目</div>
                 </div>
                 <div class="stat-card holo-card">
                     <div class="card-corner tl"></div>
                     <div class="card-corner br"></div>
                     <div class="stat-num" data-target="1337">0</div>
-                    <div class="stat-label">COMMITS_PUSHED</div>
+                    <div class="stat-label" data-i18n="stat-label-2">代码提交</div>
                 </div>
                 <div class="stat-card holo-card">
                     <div class="card-corner tl"></div>
                     <div class="card-corner br"></div>
                     <div class="stat-num" data-target="24">0</div>
-                    <div class="stat-label">CLIENTS_HACKED</div>
+                    <div class="stat-label" data-i18n="stat-label-3">攻破客户端</div>
                 </div>
                 <div class="stat-card holo-card">
                     <div class="card-corner tl"></div>
                     <div class="card-corner br"></div>
                     <div class="stat-num" data-target="365">0</div>
-                    <div class="stat-label">DAYS_CODING</div>
+                    <div class="stat-label" data-i18n="stat-label-4">持续编码天数</div>
                 </div>
             </div>
         </div>
@@ -179,8 +178,8 @@
     <!-- ========== PROJECTS SECTION ========== -->
     <section id="projects" class="section projects-section">
         <div class="section-header">
-            <span class="section-num">02</span>
-            <h2 class="section-title glitch" data-text="// PROJECTS">// PROJECTS</h2>
+            <span class="section-num" data-i18n="section-num-2">02</span>
+            <h2 class="section-title glitch" data-i18n="projects-title" data-text="// PROJECTS" data-i18n-datatext="projects-title">// 项目展示</h2>
             <div class="section-line"></div>
         </div>
 
@@ -191,22 +190,16 @@
                 <div class="card-corner bl"></div>
                 <div class="card-corner br"></div>
                 <div class="card-scan"></div>
-
                 <div class="project-id">PRJ_001</div>
                 <div class="project-icon">{ }</div>
-                <h3 class="project-title">NEURAL_NET</h3>
-                <p class="project-desc">
-                    AI-powered neural network visualization platform with real-time training metrics
-                    and 3D model architecture rendering.
-                </p>
+                <h3 class="project-title" data-i18n="prj-1-title">神经网络</h3>
+                <p class="project-desc" data-i18n="prj-1-desc">AI驱动的神经网络可视化平台，支持实时训练指标监控和3D模型架构渲染。</p>
                 <div class="project-tech">
                     <span class="tech-tag">React</span>
                     <span class="tech-tag">Three.js</span>
                     <span class="tech-tag">Python</span>
                 </div>
-                <div class="project-link">
-                    <span>ACCESS_NODE &gt;&gt;</span>
-                </div>
+                <div class="project-link"><span data-i18n="prj-link">访问节点 >></span></div>
             </article>
 
             <article class="project-card holo-card" data-tilt>
@@ -215,22 +208,16 @@
                 <div class="card-corner bl"></div>
                 <div class="card-corner br"></div>
                 <div class="card-scan"></div>
-
                 <div class="project-id">PRJ_002</div>
                 <div class="project-icon">&lt;/&gt;</div>
-                <h3 class="project-title">CYBER_DASH</h3>
-                <p class="project-desc">
-                    Real-time data dashboard with WebSocket streaming, particle effects, and
-                    holographic UI components inspired by sci-fi interfaces.
-                </p>
+                <h3 class="project-title" data-i18n="prj-2-title">赛博仪表盘</h3>
+                <p class="project-desc" data-i18n="prj-2-desc">实时数据仪表盘，集成WebSocket流式传输、粒子特效和全息UI组件，灵感来自科幻界面。</p>
                 <div class="project-tech">
                     <span class="tech-tag">Vue</span>
                     <span class="tech-tag">D3.js</span>
                     <span class="tech-tag">Node.js</span>
                 </div>
-                <div class="project-link">
-                    <span>ACCESS_NODE &gt;&gt;</span>
-                </div>
+                <div class="project-link"><span data-i18n="prj-link">访问节点 >></span></div>
             </article>
 
             <article class="project-card holo-card" data-tilt>
@@ -239,22 +226,16 @@
                 <div class="card-corner bl"></div>
                 <div class="card-corner br"></div>
                 <div class="card-scan"></div>
-
                 <div class="project-id">PRJ_003</div>
                 <div class="project-icon">[#]</div>
-                <h3 class="project-title">CHAIN_VAULT</h3>
-                <p class="project-desc">
-                    Decentralized storage protocol with end-to-end encryption, zero-knowledge proofs,
-                    and a stunning glassmorphism interface.
-                </p>
+                <h3 class="project-title" data-i18n="prj-3-title">链上保险库</h3>
+                <p class="project-desc" data-i18n="prj-3-desc">去中心化存储协议，端到端加密、零知识证明，配以炫目的毛玻璃风格界面。</p>
                 <div class="project-tech">
                     <span class="tech-tag">Solidity</span>
                     <span class="tech-tag">Next.js</span>
                     <span class="tech-tag">IPFS</span>
                 </div>
-                <div class="project-link">
-                    <span>ACCESS_NODE &gt;&gt;</span>
-                </div>
+                <div class="project-link"><span data-i18n="prj-link">访问节点 >></span></div>
             </article>
 
             <article class="project-card holo-card" data-tilt>
@@ -263,22 +244,16 @@
                 <div class="card-corner bl"></div>
                 <div class="card-corner br"></div>
                 <div class="card-scan"></div>
-
                 <div class="project-id">PRJ_004</div>
                 <div class="project-icon">[*]</div>
-                <h3 class="project-title">PIXEL_FORGE</h3>
-                <p class="project-desc">
-                    Generative art studio that creates unique digital artworks using procedural
-                    algorithms, fluid simulations, and shader magic.
-                </p>
+                <h3 class="project-title" data-i18n="prj-4-title">像素锻造</h3>
+                <p class="project-desc" data-i18n="prj-4-desc">生成艺术工作室，利用程序化算法、流体模拟和着色器魔法创造独特的数字艺术作品。</p>
                 <div class="project-tech">
                     <span class="tech-tag">WebGL</span>
                     <span class="tech-tag">GLSL</span>
                     <span class="tech-tag">Canvas</span>
                 </div>
-                <div class="project-link">
-                    <span>ACCESS_NODE &gt;&gt;</span>
-                </div>
+                <div class="project-link"><span data-i18n="prj-link">访问节点 >></span></div>
             </article>
 
             <article class="project-card holo-card" data-tilt>
@@ -287,22 +262,16 @@
                 <div class="card-corner bl"></div>
                 <div class="card-corner br"></div>
                 <div class="card-scan"></div>
-
                 <div class="project-id">PRJ_005</div>
                 <div class="project-icon">[$]</div>
-                <h3 class="project-title">GHOST_PROTOCOL</h3>
-                <p class="project-desc">
-                    Privacy-first messaging app with quantum-resistant encryption, self-destructing
-                    messages, and a brutalist cyberpunk UI.
-                </p>
+                <h3 class="project-title" data-i18n="prj-5-title">幽灵协议</h3>
+                <p class="project-desc" data-i18n="prj-5-desc">隐私优先的通讯应用，量子抗性加密、自毁消息，搭配粗野主义赛博朋克UI。</p>
                 <div class="project-tech">
                     <span class="tech-tag">React Native</span>
                     <span class="tech-tag">Rust</span>
                     <span class="tech-tag">WebRTC</span>
                 </div>
-                <div class="project-link">
-                    <span>ACCESS_NODE &gt;&gt;</span>
-                </div>
+                <div class="project-link"><span data-i18n="prj-link">访问节点 >></span></div>
             </article>
 
             <article class="project-card holo-card" data-tilt>
@@ -311,22 +280,16 @@
                 <div class="card-corner bl"></div>
                 <div class="card-corner br"></div>
                 <div class="card-scan"></div>
-
                 <div class="project-id">PRJ_006</div>
                 <div class="project-icon">[?]</div>
-                <h3 class="project-title">AI_ORACLE</h3>
-                <p class="project-desc">
-                    Conversational AI interface with voice synthesis, real-time emotion analysis,
-                    and a holographic 3D avatar that responds to user input.
-                </p>
+                <h3 class="project-title" data-i18n="prj-6-title">AI神谕</h3>
+                <p class="project-desc" data-i18n="prj-6-desc">对话式AI界面，集成语音合成、实时情绪分析，全息3D形象根据用户输入做出反应。</p>
                 <div class="project-tech">
                     <span class="tech-tag">GPT-4</span>
                     <span class="tech-tag">TTS</span>
                     <span class="tech-tag">Three.js</span>
                 </div>
-                <div class="project-link">
-                    <span>ACCESS_NODE &gt;&gt;</span>
-                </div>
+                <div class="project-link"><span data-i18n="prj-link">访问节点 >></span></div>
             </article>
         </div>
     </section>
@@ -334,8 +297,8 @@
     <!-- ========== SKILLS SECTION ========== -->
     <section id="skills" class="section skills-section">
         <div class="section-header">
-            <span class="section-num">03</span>
-            <h2 class="section-title glitch" data-text="// SKILL_MATRIX">// SKILL_MATRIX</h2>
+            <span class="section-num" data-i18n="section-num-3">03</span>
+            <h2 class="section-title glitch" data-i18n="skills-title" data-text="// SKILL_MATRIX" data-i18n-datatext="skills-title">// 技能矩阵</h2>
             <div class="section-line"></div>
         </div>
 
@@ -343,7 +306,7 @@
             <div class="skill-category holo-card">
                 <div class="card-corner tl"></div>
                 <div class="card-corner br"></div>
-                <h3 class="skill-cat-title">[FRONTEND]</h3>
+                <h3 class="skill-cat-title" data-i18n="skill-cat-1">[前端]</h3>
                 <div class="skill-bar" data-skill="JavaScript / TypeScript" data-level="95"></div>
                 <div class="skill-bar" data-skill="React / Vue / Svelte" data-level="92"></div>
                 <div class="skill-bar" data-skill="CSS / Tailwind / SASS" data-level="90"></div>
@@ -354,7 +317,7 @@
             <div class="skill-category holo-card">
                 <div class="card-corner tl"></div>
                 <div class="card-corner br"></div>
-                <h3 class="skill-cat-title">[BACKEND]</h3>
+                <h3 class="skill-cat-title" data-i18n="skill-cat-2">[后端]</h3>
                 <div class="skill-bar" data-skill="Node.js / Express" data-level="93"></div>
                 <div class="skill-bar" data-skill="Python / Django" data-level="87"></div>
                 <div class="skill-bar" data-skill="Go / Rust" data-level="75"></div>
@@ -365,7 +328,7 @@
             <div class="skill-category holo-card">
                 <div class="card-corner tl"></div>
                 <div class="card-corner br"></div>
-                <h3 class="skill-cat-title">[DEVOPS]</h3>
+                <h3 class="skill-cat-title" data-i18n="skill-cat-3">[运维]</h3>
                 <div class="skill-bar" data-skill="Docker / Kubernetes" data-level="86"></div>
                 <div class="skill-bar" data-skill="AWS / Vercel / Cloudflare" data-level="90"></div>
                 <div class="skill-bar" data-skill="CI/CD / GitHub Actions" data-level="88"></div>
@@ -378,8 +341,8 @@
     <!-- ========== TERMINAL SECTION ========== -->
     <section id="terminal" class="section terminal-section">
         <div class="section-header">
-            <span class="section-num">04</span>
-            <h2 class="section-title glitch" data-text="// TERMINAL_ACCESS">// TERMINAL_ACCESS</h2>
+            <span class="section-num" data-i18n="section-num-4">04</span>
+            <h2 class="section-title glitch" data-i18n="terminal-title" data-text="// TERMINAL_ACCESS" data-i18n-datatext="terminal-title">// 终端访问</h2>
             <div class="section-line"></div>
         </div>
 
@@ -390,20 +353,20 @@
                     <span class="control control-min"></span>
                     <span class="control control-max"></span>
                 </div>
-                <div class="terminal-title">nexus@cyberdeck:~ — bash — 80x24</div>
-                <div class="terminal-status">[ENCRYPTED]</div>
+                <div class="terminal-title" data-i18n="term-header">nexus@cyberdeck:~ — bash — 80x24</div>
+                <div class="terminal-status" data-i18n="term-status">[已加密]</div>
             </div>
 
             <div class="terminal-body" id="terminal-body">
                 <div class="terminal-output" id="terminal-output"></div>
                 <div class="terminal-input-line">
-                    <span class="terminal-prompt">nexus@cyberdeck:~$</span>
+                    <span class="terminal-prompt" data-i18n="term-prompt">nexus@cyberdeck:~$</span>
                     <input type="text" class="terminal-input" id="terminal-input" autocomplete="off" spellcheck="false">
                 </div>
             </div>
 
             <div class="terminal-hint">
-                TIP: Type <span class="hint-cmd">help</span> to see available commands
+                <span data-i18n="term-hint">提示: 输入</span> <span class="hint-cmd" data-i18n="term-hint-cmd">help</span>
             </div>
         </div>
     </section>
@@ -411,15 +374,15 @@
     <!-- ========== CONTACT SECTION ========== -->
     <section id="contact" class="section contact-section">
         <div class="section-header">
-            <span class="section-num">05</span>
-            <h2 class="section-title glitch" data-text="// ESTABLISH_CONNECTION">// ESTABLISH_CONNECTION</h2>
+            <span class="section-num" data-i18n="section-num-5">05</span>
+            <h2 class="section-title glitch" data-i18n="contact-title" data-text="// ESTABLISH_CONNECTION" data-i18n-datatext="contact-title">// 建立连接</h2>
             <div class="section-line"></div>
         </div>
 
         <div class="contact-content">
             <div class="contact-message">
-                <p class="contact-line">&gt; Ready to jack in?</p>
-                <p class="contact-line">&gt; Drop a signal through any of these channels:</p>
+                <p class="contact-line" data-i18n="contact-line-1">> 准备好了吗？</p>
+                <p class="contact-line" data-i18n="contact-line-2">> 通过以下任意渠道发出信号：</p>
             </div>
 
             <div class="contact-grid">
@@ -427,28 +390,28 @@
                     <div class="card-corner tl"></div>
                     <div class="card-corner br"></div>
                     <div class="contact-icon">@</div>
-                    <div class="contact-label">EMAIL</div>
+                    <div class="contact-label" data-i18n="contact-label-1">邮箱</div>
                     <div class="contact-value">hello@nexus.dev</div>
                 </a>
                 <a href="https://github.com" target="_blank" rel="noopener" class="contact-card holo-card">
                     <div class="card-corner tl"></div>
                     <div class="card-corner br"></div>
                     <div class="contact-icon">&lt;/&gt;</div>
-                    <div class="contact-label">GITHUB</div>
+                    <div class="contact-label" data-i18n="contact-label-2">GitHub</div>
                     <div class="contact-value">@nexus_dev</div>
                 </a>
                 <a href="https://twitter.com" target="_blank" rel="noopener" class="contact-card holo-card">
                     <div class="card-corner tl"></div>
                     <div class="card-corner br"></div>
                     <div class="contact-icon">[X]</div>
-                    <div class="contact-label">TWITTER</div>
+                    <div class="contact-label" data-i18n="contact-label-3">Twitter</div>
                     <div class="contact-value">@nexus_dev</div>
                 </a>
                 <a href="https://linkedin.com" target="_blank" rel="noopener" class="contact-card holo-card">
                     <div class="card-corner tl"></div>
                     <div class="card-corner br"></div>
                     <div class="contact-icon">[in]</div>
-                    <div class="contact-label">LINKEDIN</div>
+                    <div class="contact-label" data-i18n="contact-label-4">领英</div>
                     <div class="contact-value">/in/nexus</div>
                 </a>
             </div>
@@ -464,12 +427,12 @@
                 <span class="footer-version">v2.077.1</span>
             </div>
             <div class="footer-center">
-                <span>© 2077 NEXUS // ALL_RIGHTS_RESERVED</span>
+                <span data-i18n="footer-center">© 2077 NEXUS // 版权所有</span>
             </div>
             <div class="footer-right">
                 <span class="footer-status">
                     <span class="status-dot"></span>
-                    SYSTEM_OPERATIONAL
+                    <span data-i18n="footer-status">系统运行中</span>
                 </span>
             </div>
         </div>
@@ -477,6 +440,7 @@
 
     <!-- ========== SCRIPTS ========== -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="js/i18n.js"></script>
     <script src="js/matrix.js"></script>
     <script src="js/particles.js"></script>
     <script src="js/terminal.js"></script>

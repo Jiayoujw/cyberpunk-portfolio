@@ -9,44 +9,37 @@
     // ============================================================
     // BOOT SEQUENCE
     // ============================================================
-    const bootScreen = document.getElementById('boot-screen');
-    const bootText = document.getElementById('boot-text');
-    const bootProgressBar = document.getElementById('boot-progress-bar');
-    const bootStatus = document.getElementById('boot-status');
+    var bootScreen = document.getElementById('boot-screen');
+    var bootText = document.getElementById('boot-text');
+    var bootProgressBar = document.getElementById('boot-progress-bar');
+    var bootStatus = document.getElementById('boot-status');
+    var bootIdx = 0;
+    var bootProgress = 0;
 
-    const bootMessages = [
-        '> [BIOS] Initializing N3X.OS v2.077.1...',
-        '> [BIOS] Memory check: 16384MB OK',
-        '> [BIOS] Neural interface: DETECTED',
-        '> [SYS]  Loading kernel modules...',
-        '> [SYS]  Mounting /dev/cyberdeck...',
-        '> [NET]  Establishing encrypted tunnel...',
-        '> [NET]  Connection: SECURE',
-        '> [SYS]  Loading user profile: nexus',
-        '> [GFX]  Initializing holographic display...',
-        '> [GFX]  Particle system: ONLINE',
-        '> [SYS]  All systems nominal.',
-        '> [SYS]  Welcome back, choomba.'
-    ];
-
-    let bootIdx = 0;
-    let bootProgress = 0;
+    function getBootMessages() {
+        return [
+            I18N.t('boot-1'), I18N.t('boot-2'), I18N.t('boot-3'),
+            I18N.t('boot-4'), I18N.t('boot-5'), I18N.t('boot-6'),
+            I18N.t('boot-7'), I18N.t('boot-8'), I18N.t('boot-9'),
+            I18N.t('boot-10'), I18N.t('boot-11'), I18N.t('boot-12')
+        ];
+    }
 
     function bootStep() {
-        if (bootIdx < bootMessages.length) {
-            bootText.textContent += bootMessages[bootIdx] + '\n';
+        var msgs = getBootMessages();
+        if (bootIdx < msgs.length) {
+            bootText.textContent += msgs[bootIdx] + '\n';
             bootIdx++;
-            bootProgress = (bootIdx / bootMessages.length) * 100;
+            bootProgress = (bootIdx / msgs.length) * 100;
             bootProgressBar.style.width = bootProgress + '%';
-
-            const delay = 100 + Math.random() * 150;
+            var delay = 100 + Math.random() * 150;
             setTimeout(bootStep, delay);
         } else {
-            bootStatus.textContent = 'SYSTEM READY';
+            bootStatus.textContent = I18N.t('boot-ready');
             bootStatus.style.color = 'var(--color-green)';
-            setTimeout(() => {
+            setTimeout(function() {
                 bootScreen.classList.add('fade-out');
-                setTimeout(() => {
+                setTimeout(function() {
                     bootScreen.style.display = 'none';
                     initInteractions();
                 }, 600);
@@ -56,7 +49,7 @@
 
     // Skip boot screen on click/key
     bootScreen.addEventListener('click', skipBoot);
-    document.addEventListener('keydown', (e) => {
+    document.addEventListener('keydown', function(e) {
         if (bootScreen.style.display !== 'none' && e.key === 'Escape') {
             skipBoot();
         }
@@ -64,7 +57,7 @@
 
     function skipBoot() {
         bootScreen.classList.add('fade-out');
-        setTimeout(() => {
+        setTimeout(function() {
             bootScreen.style.display = 'none';
             initInteractions();
         }, 300);
@@ -73,17 +66,16 @@
     // Start boot
     setTimeout(bootStep, 200);
 
-    // Failsafe: hide after 8s no matter what
-    setTimeout(() => {
-        if (bootScreen.style.display !== 'none') {
-            skipBoot();
-        }
+    // Failsafe: hide after 8s
+    setTimeout(function() {
+        if (bootScreen.style.display !== 'none') skipBoot();
     }, 8000);
 
     // ============================================================
     // INITIALIZE INTERACTIONS (after boot)
     // ============================================================
     function initInteractions() {
+        initLangToggle();
         initCursor();
         initClock();
         initTypewriter();
@@ -97,14 +89,27 @@
     }
 
     // ============================================================
+    // LANGUAGE TOGGLE
+    // ============================================================
+    function initLangToggle() {
+        var btn = document.getElementById('lang-toggle');
+        if (!btn) return;
+
+        btn.addEventListener('click', function() {
+            var next = I18N.getLang() === 'zh' ? 'en' : 'zh';
+            I18N.setLanguage(next);
+            restartTypewriter();
+        });
+    }
+
+    // ============================================================
     // CUSTOM CURSOR
     // ============================================================
     function initCursor() {
-        const dot = document.getElementById('cursor-dot');
-        const outline = document.getElementById('cursor-outline');
+        var dot = document.getElementById('cursor-dot');
+        var outline = document.getElementById('cursor-outline');
         if (!dot || !outline) return;
 
-        // Skip on touch devices
         if ('ontouchstart' in window || navigator.maxTouchPoints > 0) {
             dot.style.display = 'none';
             outline.style.display = 'none';
@@ -112,17 +117,16 @@
             return;
         }
 
-        let mouseX = 0, mouseY = 0;
-        let outlineX = 0, outlineY = 0;
+        var mouseX = 0, mouseY = 0;
+        var outlineX = 0, outlineY = 0;
 
-        document.addEventListener('mousemove', (e) => {
+        document.addEventListener('mousemove', function(e) {
             mouseX = e.clientX;
             mouseY = e.clientY;
             dot.style.left = mouseX + 'px';
             dot.style.top = mouseY + 'px';
         });
 
-        // Smoothly lag the outline
         function tick() {
             outlineX += (mouseX - outlineX) * 0.18;
             outlineY += (mouseY - outlineY) * 0.18;
@@ -132,19 +136,17 @@
         }
         tick();
 
-        // Hover state for interactive elements
-        const hoverables = document.querySelectorAll('a, button, .holo-card, .terminal-input, input');
-        hoverables.forEach(el => {
-            el.addEventListener('mouseenter', () => outline.classList.add('hover'));
-            el.addEventListener('mouseleave', () => outline.classList.remove('hover'));
+        var hoverables = document.querySelectorAll('a, button, .holo-card, .terminal-input, input');
+        hoverables.forEach(function(el) {
+            el.addEventListener('mouseenter', function() { outline.classList.add('hover'); });
+            el.addEventListener('mouseleave', function() { outline.classList.remove('hover'); });
         });
 
-        // Hide cursor when leaving window
-        document.addEventListener('mouseleave', () => {
+        document.addEventListener('mouseleave', function() {
             dot.style.opacity = '0';
             outline.style.opacity = '0';
         });
-        document.addEventListener('mouseenter', () => {
+        document.addEventListener('mouseenter', function() {
             dot.style.opacity = '1';
             outline.style.opacity = '1';
         });
@@ -154,28 +156,27 @@
     // CLOCK + COORDS
     // ============================================================
     function initClock() {
-        const timeEl = document.getElementById('hud-time');
-        const coordsEl = document.getElementById('hud-coords');
+        var timeEl = document.getElementById('hud-time');
+        var coordsEl = document.getElementById('hud-coords');
         if (!timeEl) return;
 
         function update() {
-            const now = new Date();
-            const hh = String(now.getHours()).padStart(2, '0');
-            const mm = String(now.getMinutes()).padStart(2, '0');
-            const ss = String(now.getSeconds()).padStart(2, '0');
-            timeEl.textContent = `${hh}:${mm}:${ss}`;
+            var now = new Date();
+            var hh = String(now.getHours()).padStart(2, '0');
+            var mm = String(now.getMinutes()).padStart(2, '0');
+            var ss = String(now.getSeconds()).padStart(2, '0');
+            timeEl.textContent = hh + ':' + mm + ':' + ss;
         }
         update();
         setInterval(update, 1000);
 
-        // Slowly drifting "coordinates" for vibes
         if (coordsEl) {
-            let lat = 35.6;
-            let lon = 139.7;
-            setInterval(() => {
+            var lat = 35.6;
+            var lon = 139.7;
+            setInterval(function() {
                 lat += (Math.random() - 0.5) * 0.02;
                 lon += (Math.random() - 0.5) * 0.02;
-                coordsEl.textContent = `N ${lat.toFixed(1)}° / E ${lon.toFixed(1)}°`;
+                coordsEl.textContent = I18N.t('hud-coords');
             }, 2000);
         }
     }
@@ -183,30 +184,35 @@
     // ============================================================
     // TYPEWRITER (Hero subtitle)
     // ============================================================
+    var typewriterTimer = null;
+
     function initTypewriter() {
-        const el = document.getElementById('typewriter');
+        restartTypewriter();
+    }
+
+    function restartTypewriter() {
+        if (typewriterTimer) clearTimeout(typewriterTimer);
+
+        var el = document.getElementById('typewriter');
         if (!el) return;
 
-        const phrases = [
-            'Building digital experiences with neon and code',
-            'Crafting interfaces that pulse with electric life',
-            'Pixels by day. Particles by night.',
-            'Where art meets the machine — that\'s home.',
-            '在霓虹与代码之间，构建数字奇迹。'
+        var phrases = [
+            I18N.t('type-1'), I18N.t('type-2'), I18N.t('type-3'),
+            I18N.t('type-4'), I18N.t('type-5')
         ];
 
-        let phraseIdx = 0;
-        let charIdx = 0;
-        let isDeleting = false;
+        var phraseIdx = 0;
+        var charIdx = 0;
+        var isDeleting = false;
 
         function tick() {
-            const phrase = phrases[phraseIdx];
+            var phrase = phrases[phraseIdx];
 
             if (!isDeleting) {
                 el.textContent = phrase.slice(0, ++charIdx);
                 if (charIdx === phrase.length) {
                     isDeleting = true;
-                    setTimeout(tick, 2000);
+                    typewriterTimer = setTimeout(tick, 2000);
                     return;
                 }
             } else {
@@ -217,25 +223,24 @@
                 }
             }
 
-            const delay = isDeleting ? 30 : (60 + Math.random() * 60);
-            setTimeout(tick, delay);
+            var delay = isDeleting ? 30 : (60 + Math.random() * 60);
+            typewriterTimer = setTimeout(tick, delay);
         }
 
-        setTimeout(tick, 1800);
+        typewriterTimer = setTimeout(tick, 1800);
     }
 
     // ============================================================
-    // SCROLL REVEAL (IntersectionObserver)
+    // SCROLL REVEAL
     // ============================================================
     function initScrollReveal() {
         if (!('IntersectionObserver' in window)) return;
 
-        // Auto-tag sections for reveal
-        const targets = document.querySelectorAll('.section-header, .holo-card, .about-grid > *, .about-stats > *, .skill-category, .terminal-window, .contact-grid > *');
-        targets.forEach(el => el.classList.add('reveal'));
+        var targets = document.querySelectorAll('.section-header, .holo-card, .about-grid > *, .about-stats > *, .skill-category, .terminal-window, .contact-grid > *');
+        targets.forEach(function(el) { el.classList.add('reveal'); });
 
-        const obs = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
+        var obs = new IntersectionObserver(function(entries) {
+            entries.forEach(function(entry) {
                 if (entry.isIntersecting) {
                     entry.target.classList.add('visible');
                     obs.unobserve(entry.target);
@@ -243,37 +248,35 @@
             });
         }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
 
-        targets.forEach(el => obs.observe(el));
+        targets.forEach(function(el) { obs.observe(el); });
     }
 
     // ============================================================
-    // NAVIGATION (active link based on scroll)
+    // NAVIGATION
     // ============================================================
     function initNavigation() {
-        const sections = document.querySelectorAll('section[id]');
-        const links = document.querySelectorAll('.nav-link');
-
+        var sections = document.querySelectorAll('section[id]');
+        var links = document.querySelectorAll('.nav-link');
         if (!sections.length || !links.length) return;
 
-        // Scroll-based active detection
         function updateActive() {
-            const scrollPos = window.scrollY + 150;
-            sections.forEach(sec => {
-                const top = sec.offsetTop;
-                const bot = top + sec.offsetHeight;
+            var scrollPos = window.scrollY + 150;
+            sections.forEach(function(sec) {
+                var top = sec.offsetTop;
+                var bot = top + sec.offsetHeight;
                 if (scrollPos >= top && scrollPos < bot) {
-                    const id = sec.id;
-                    links.forEach(l => {
+                    var id = sec.id;
+                    links.forEach(function(l) {
                         l.classList.toggle('active', l.getAttribute('href') === '#' + id);
                     });
                 }
             });
         }
 
-        let ticking = false;
-        window.addEventListener('scroll', () => {
+        var ticking = false;
+        window.addEventListener('scroll', function() {
             if (!ticking) {
-                requestAnimationFrame(() => {
+                requestAnimationFrame(function() {
                     updateActive();
                     ticking = false;
                 });
@@ -282,12 +285,11 @@
         });
         updateActive();
 
-        // Smooth scroll on click (handled by CSS scroll-behavior, but ensure offset)
-        links.forEach(link => {
-            link.addEventListener('click', (e) => {
-                const href = link.getAttribute('href');
+        links.forEach(function(link) {
+            link.addEventListener('click', function(e) {
+                var href = link.getAttribute('href');
                 if (href && href.startsWith('#')) {
-                    const target = document.querySelector(href);
+                    var target = document.querySelector(href);
                     if (target) {
                         e.preventDefault();
                         target.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -301,11 +303,11 @@
     // STAT COUNTERS
     // ============================================================
     function initStatCounters() {
-        const stats = document.querySelectorAll('.stat-num');
+        var stats = document.querySelectorAll('.stat-num');
         if (!stats.length) return;
 
-        const obs = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
+        var obs = new IntersectionObserver(function(entries) {
+            entries.forEach(function(entry) {
                 if (entry.isIntersecting) {
                     countTo(entry.target);
                     obs.unobserve(entry.target);
@@ -313,17 +315,16 @@
             });
         }, { threshold: 0.5 });
 
-        stats.forEach(s => obs.observe(s));
+        stats.forEach(function(s) { obs.observe(s); });
 
         function countTo(el) {
-            const target = parseInt(el.dataset.target, 10);
-            const duration = 1800;
-            const start = performance.now();
+            var target = parseInt(el.dataset.target, 10);
+            var duration = 1800;
+            var start = performance.now();
 
             function step(now) {
-                const t = Math.min(1, (now - start) / duration);
-                // Easing (easeOutExpo)
-                const eased = t === 1 ? 1 : 1 - Math.pow(2, -10 * t);
+                var t = Math.min(1, (now - start) / duration);
+                var eased = t === 1 ? 1 : 1 - Math.pow(2, -10 * t);
                 el.textContent = Math.floor(eased * target).toLocaleString();
                 if (t < 1) requestAnimationFrame(step);
                 else el.textContent = target.toLocaleString();
@@ -336,26 +337,25 @@
     // SKILL BARS
     // ============================================================
     function initSkillBars() {
-        const bars = document.querySelectorAll('.skill-bar');
+        var bars = document.querySelectorAll('.skill-bar');
         if (!bars.length) return;
 
-        // Inject the track + fill into each skill-bar
-        bars.forEach(bar => {
-            const track = document.createElement('div');
+        bars.forEach(function(bar) {
+            var track = document.createElement('div');
             track.className = 'skill-bar-track';
-            const fill = document.createElement('div');
+            var fill = document.createElement('div');
             fill.className = 'skill-bar-fill';
             track.appendChild(fill);
             bar.appendChild(track);
         });
 
-        const obs = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
+        var obs = new IntersectionObserver(function(entries) {
+            entries.forEach(function(entry) {
                 if (entry.isIntersecting) {
-                    const fill = entry.target.querySelector('.skill-bar-fill');
-                    const level = entry.target.dataset.level;
+                    var fill = entry.target.querySelector('.skill-bar-fill');
+                    var level = entry.target.dataset.level;
                     if (fill) {
-                        setTimeout(() => {
+                        setTimeout(function() {
                             fill.style.width = level + '%';
                         }, 100);
                     }
@@ -364,63 +364,57 @@
             });
         }, { threshold: 0.3 });
 
-        bars.forEach(b => obs.observe(b));
+        bars.forEach(function(b) { obs.observe(b); });
     }
 
     // ============================================================
     // PROJECT CARD 3D TILT
     // ============================================================
     function initProjectTilt() {
-        const cards = document.querySelectorAll('[data-tilt]');
+        var cards = document.querySelectorAll('[data-tilt]');
         if (!cards.length) return;
 
-        cards.forEach(card => {
-            card.addEventListener('mousemove', (e) => {
-                const rect = card.getBoundingClientRect();
-                const x = e.clientX - rect.left;
-                const y = e.clientY - rect.top;
-
-                const cx = rect.width / 2;
-                const cy = rect.height / 2;
-
-                const rotX = -((y - cy) / cy) * 8;
-                const rotY = ((x - cx) / cx) * 8;
-
-                card.style.transform = `perspective(1000px) rotateX(${rotX}deg) rotateY(${rotY}deg) translateY(-4px)`;
+        cards.forEach(function(card) {
+            card.addEventListener('mousemove', function(e) {
+                var rect = card.getBoundingClientRect();
+                var x = e.clientX - rect.left;
+                var y = e.clientY - rect.top;
+                var cx = rect.width / 2;
+                var cy = rect.height / 2;
+                var rotX = -((y - cy) / cy) * 8;
+                var rotY = ((x - cx) / cx) * 8;
+                card.style.transform = 'perspective(1000px) rotateX(' + rotX + 'deg) rotateY(' + rotY + 'deg) translateY(-4px)';
             });
 
-            card.addEventListener('mouseleave', () => {
+            card.addEventListener('mouseleave', function() {
                 card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) translateY(0)';
             });
         });
     }
 
     // ============================================================
-    // HERO FRAME TILT (subtle)
+    // HERO FRAME TILT
     // ============================================================
     function initHeroFrameTilt() {
-        const frame = document.querySelector('.hero-frame');
+        var frame = document.querySelector('.hero-frame');
         if (!frame) return;
 
-        document.addEventListener('mousemove', (e) => {
-            const x = (e.clientX / window.innerWidth - 0.5) * 4;
-            const y = (e.clientY / window.innerHeight - 0.5) * 4;
-            frame.style.transform = `perspective(1500px) rotateX(${-y}deg) rotateY(${x}deg)`;
+        document.addEventListener('mousemove', function(e) {
+            var x = (e.clientX / window.innerWidth - 0.5) * 4;
+            var y = (e.clientY / window.innerHeight - 0.5) * 4;
+            frame.style.transform = 'perspective(1500px) rotateX(' + (-y) + 'deg) rotateY(' + x + 'deg)';
         });
     }
 
     // ============================================================
-    // HOVER EFFECTS (random glitch)
+    // HOVER EFFECTS
     // ============================================================
     function initHoverEffects() {
-        // Add glitch-flash class on certain elements when in view
-        const flashable = document.querySelectorAll('.section-title');
-        flashable.forEach(el => {
-            el.addEventListener('mouseenter', () => {
+        var flashable = document.querySelectorAll('.section-title');
+        flashable.forEach(function(el) {
+            el.addEventListener('mouseenter', function() {
                 el.style.animation = 'none';
-                requestAnimationFrame(() => {
-                    el.style.animation = '';
-                });
+                requestAnimationFrame(function() { el.style.animation = ''; });
             });
         });
     }
@@ -428,9 +422,9 @@
     // ============================================================
     // KONAMI CODE EASTER EGG
     // ============================================================
-    const konami = ['ArrowUp','ArrowUp','ArrowDown','ArrowDown','ArrowLeft','ArrowRight','ArrowLeft','ArrowRight','b','a'];
-    let kIdx = 0;
-    document.addEventListener('keydown', (e) => {
+    var konami = ['ArrowUp','ArrowUp','ArrowDown','ArrowDown','ArrowLeft','ArrowRight','ArrowLeft','ArrowRight','b','a'];
+    var kIdx = 0;
+    document.addEventListener('keydown', function(e) {
         if (e.key === konami[kIdx]) {
             kIdx++;
             if (kIdx === konami.length) {
@@ -444,18 +438,18 @@
 
     function triggerKonami() {
         document.body.style.animation = 'gradient-flow 0.5s linear 6';
-        const banner = document.createElement('div');
-        banner.style.cssText = `
-            position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
-            background: rgba(0,0,0,0.9); border: 2px solid var(--color-magenta);
-            padding: 2rem 3rem; z-index: 99999;
-            font-family: var(--font-display); font-size: 2rem;
-            color: var(--color-yellow); text-shadow: 0 0 20px var(--color-yellow);
-            letter-spacing: 0.3rem; text-align: center;
-        `;
-        banner.innerHTML = '🎮 KONAMI MODE ACTIVATED 🎮<br><span style="font-size:1rem;color:var(--color-cyan);">+30 STYLE POINTS</span>';
+        var banner = document.createElement('div');
+        banner.style.cssText = [
+            'position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);',
+            'background:rgba(0,0,0,0.9);border:2px solid var(--color-magenta);',
+            'padding:2rem 3rem;z-index:99999;',
+            'font-family:var(--font-display);font-size:2rem;',
+            'color:var(--color-yellow);text-shadow:0 0 20px var(--color-yellow);',
+            'letter-spacing:0.3rem;text-align:center;'
+        ].join('');
+        banner.innerHTML = I18N.t('konami-title') + '<br><span style="font-size:1rem;color:var(--color-cyan);">' + I18N.t('konami-sub') + '</span>';
         document.body.appendChild(banner);
-        setTimeout(() => {
+        setTimeout(function() {
             banner.remove();
             document.body.style.animation = '';
         }, 3000);
@@ -465,8 +459,8 @@
     // CONSOLE EASTER EGG
     // ============================================================
     console.log('%c╔══════════════════════════════════════╗', 'color: #00ffff; font-family: monospace;');
-    console.log('%c║      NEXUS // DIGITAL ARCHITECT      ║', 'color: #00ffff; font-family: monospace; font-weight: bold;');
-    console.log('%c║       Code in the Neon Light         ║', 'color: #ff00ff; font-family: monospace;');
+    console.log('%c║      ' + I18N.t('console-1') + '      ║', 'color: #00ffff; font-family: monospace; font-weight: bold;');
+    console.log('%c║       ' + I18N.t('console-2') + '         ║', 'color: #ff00ff; font-family: monospace;');
     console.log('%c╚══════════════════════════════════════╝', 'color: #00ffff; font-family: monospace;');
-    console.log('%cTry the Konami code, or scroll to the terminal section :)', 'color: #fff700; font-style: italic;');
+    console.log('%c' + I18N.t('console-3'), 'color: #fff700; font-style: italic;');
 })();

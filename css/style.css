@@ -378,6 +378,27 @@ button, input {
     color: var(--color-magenta);
 }
 
+/* Language toggle */
+.lang-toggle {
+    background: transparent;
+    border: 1px solid var(--color-border);
+    color: var(--color-cyan);
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    letter-spacing: 0.1rem;
+    padding: 0.25rem 0.6rem;
+    cursor: none;
+    transition: all 0.3s ease;
+    text-shadow: 0 0 8px var(--color-cyan);
+}
+
+.lang-toggle:hover {
+    background: rgba(0, 255, 255, 0.1);
+    border-color: var(--color-cyan);
+    box-shadow: 0 0 15px rgba(0, 255, 255, 0.3);
+    color: var(--color-text-bright);
+}
+
 @media (max-width: 1024px) {
     .hud-nav { display: none; }
     .hud-coords { display: none; }
