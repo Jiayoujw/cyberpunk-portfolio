@@ -71,8 +71,24 @@
             <span class="hud-time" id="hud-time">00:00:00</span>
             <span class="hud-divider">//</span>
             <span class="hud-coords" id="hud-coords">北纬 35.6° / 东经 139.7°</span>
+            <button class="hamburger" id="hamburger" aria-label="Menu">
+                <span></span><span></span><span></span>
+            </button>
         </div>
     </header>
+
+    <!-- ========== MOBILE NAV OVERLAY ========== -->
+    <div class="mobile-nav-overlay" id="mobile-nav-overlay">
+        <nav class="mobile-nav">
+            <a href="#home" class="mobile-nav-link" data-i18n="nav-home" data-i18n-datatext="nav-home">首页</a>
+            <a href="#about" class="mobile-nav-link" data-i18n="nav-about" data-i18n-datatext="nav-about">关于</a>
+            <a href="#projects" class="mobile-nav-link" data-i18n="nav-projects" data-i18n-datatext="nav-projects">项目</a>
+            <a href="#blog" class="mobile-nav-link" data-i18n="nav-blog" data-i18n-datatext="nav-blog">博客</a>
+            <a href="#skills" class="mobile-nav-link" data-i18n="nav-skills" data-i18n-datatext="nav-skills">技能</a>
+            <a href="#terminal" class="mobile-nav-link" data-i18n="nav-terminal" data-i18n-datatext="nav-terminal">终端</a>
+            <a href="#contact" class="mobile-nav-link" data-i18n="nav-contact" data-i18n-datatext="nav-contact">联系</a>
+        </nav>
+    </div>
 
     <!-- ========== HERO SECTION ========== -->
     <section id="home" class="hero">
@@ -193,7 +209,7 @@
         </div>
 
         <div class="projects-grid">
-            <article class="project-card holo-card" data-tilt>
+            <article class="project-card holo-card" data-tilt data-flip>
                 <div class="card-corner tl"></div>
                 <div class="card-corner tr"></div>
                 <div class="card-corner bl"></div>
@@ -216,7 +232,7 @@
                 <div class="project-link"><span data-i18n="prj-link">访问节点 >></span></div>
             </article>
 
-            <article class="project-card holo-card" data-tilt>
+            <article class="project-card holo-card" data-tilt data-flip>
                 <div class="card-corner tl"></div>
                 <div class="card-corner tr"></div>
                 <div class="card-corner bl"></div>
@@ -239,7 +255,7 @@
                 <div class="project-link"><span data-i18n="prj-link">访问节点 >></span></div>
             </article>
 
-            <article class="project-card holo-card" data-tilt>
+            <article class="project-card holo-card" data-tilt data-flip>
                 <div class="card-corner tl"></div>
                 <div class="card-corner tr"></div>
                 <div class="card-corner bl"></div>
@@ -262,7 +278,7 @@
                 <div class="project-link"><span data-i18n="prj-link">访问节点 >></span></div>
             </article>
 
-            <article class="project-card holo-card" data-tilt>
+            <article class="project-card holo-card" data-tilt data-flip>
                 <div class="card-corner tl"></div>
                 <div class="card-corner tr"></div>
                 <div class="card-corner bl"></div>
@@ -285,7 +301,7 @@
                 <div class="project-link"><span data-i18n="prj-link">访问节点 >></span></div>
             </article>
 
-            <article class="project-card holo-card" data-tilt>
+            <article class="project-card holo-card" data-tilt data-flip>
                 <div class="card-corner tl"></div>
                 <div class="card-corner tr"></div>
                 <div class="card-corner bl"></div>
@@ -308,7 +324,7 @@
                 <div class="project-link"><span data-i18n="prj-link">访问节点 >></span></div>
             </article>
 
-            <article class="project-card holo-card" data-tilt>
+            <article class="project-card holo-card" data-tilt data-flip>
                 <div class="card-corner tl"></div>
                 <div class="card-corner tr"></div>
                 <div class="card-corner bl"></div>
@@ -602,9 +618,12 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="js/i18n.js"></script>
     <script src="js/audio.js"></script>
+    <script src="js/glitch.js"></script>
+    <script src="js/window-manager.js"></script>
     <script src="js/mouse-trail.js"></script>
     <script src="js/matrix.js"></script>
     <script src="js/particles.js"></script>
+    <script src="js/cityscape.js"></script>
     <script src="js/terminal.js"></script>
     <script src="js/main.js"></script>
     <script>

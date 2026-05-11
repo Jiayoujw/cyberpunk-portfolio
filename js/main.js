@@ -92,11 +92,15 @@
         initPageTransitions();
         initBackToTop();
         initProjectModal();
+        initProjectFlip();
         initRadarChart();
         initTheme();
         initContactForm();
         initEasterDismiss();
         initGithubHeatmap();
+        initMobileNav();
+        initGlitchTrigger();
+        initWindowManager();
     }
 
     // ============================================================
@@ -316,6 +320,96 @@
     }
 
     // ============================================================
+    // PROJECT CARD 3D FLIP
+    // ============================================================
+    function initProjectFlip() {
+        var cards = document.querySelectorAll('.project-card[data-flip]');
+        if (!cards.length) return;
+
+        // Back face content per project ID
+        var backData = {
+            'PRJ_001': {
+                descLong: I18N.t('prj-1-desc-long'),
+                features: [I18N.t('prj-1-feat-1'), I18N.t('prj-1-feat-2'), I18N.t('prj-1-feat-3')]
+            },
+            'PRJ_002': {
+                descLong: I18N.t('prj-2-desc-long'),
+                features: [I18N.t('prj-2-feat-1'), I18N.t('prj-2-feat-2'), I18N.t('prj-2-feat-3')]
+            },
+            'PRJ_003': {
+                descLong: I18N.t('prj-3-desc-long'),
+                features: [I18N.t('prj-3-feat-1'), I18N.t('prj-3-feat-2'), I18N.t('prj-3-feat-3')]
+            },
+            'PRJ_004': {
+                descLong: I18N.t('prj-4-desc-long'),
+                features: [I18N.t('prj-4-feat-1'), I18N.t('prj-4-feat-2'), I18N.t('prj-4-feat-3')]
+            },
+            'PRJ_005': {
+                descLong: I18N.t('prj-5-desc-long'),
+                features: [I18N.t('prj-5-feat-1'), I18N.t('prj-5-feat-2'), I18N.t('prj-5-feat-3')]
+            },
+            'PRJ_006': {
+                descLong: I18N.t('prj-6-desc-long'),
+                features: [I18N.t('prj-6-feat-1'), I18N.t('prj-6-feat-2'), I18N.t('prj-6-feat-3')]
+            }
+        };
+
+        cards.forEach(function(card) {
+            // Wrap existing children in card-inner > card-front
+            var children = Array.prototype.slice.call(card.children);
+            var inner = document.createElement('div');
+            inner.className = 'card-inner';
+
+            var front = document.createElement('div');
+            front.className = 'card-front';
+            children.forEach(function(c) { front.appendChild(c); });
+
+            // Build back face
+            var idEl = front.querySelector('.project-id');
+            var id = idEl ? idEl.textContent.trim() : '';
+            var titleEl = front.querySelector('.project-title');
+            var title = titleEl ? titleEl.textContent : '';
+            var techEls = front.querySelectorAll('.tech-tag');
+            var data = backData[id] || { descLong: '', features: [] };
+
+            var back = document.createElement('div');
+            back.className = 'card-back';
+            var html = '<button class="card-back-close">[X] ' + I18N.t('card-flip-close') + '</button>';
+            html += '<div class="card-back-thumb"></div>';
+            html += '<h3 class="card-back-title">' + title + '</h3>';
+            html += '<p class="card-back-desc-long">' + data.descLong + '</p>';
+            html += '<div class="card-back-tech">';
+            techEls.forEach(function(t) { html += '<span class="tech-tag">' + t.textContent + '</span>'; });
+            html += '</div>';
+            if (data.features.length) {
+                html += '<div class="card-back-extra">';
+                data.features.forEach(function(f) { html += '<span class="card-back-feature">' + f + '</span>'; });
+                html += '</div>';
+            }
+            back.innerHTML = html;
+
+            inner.appendChild(front);
+            inner.appendChild(back);
+            card.appendChild(inner);
+
+            // Click to flip
+            card.addEventListener('click', function(e) {
+                if (e.target.closest('.card-back-close') || e.target.closest('a')) return;
+                card.classList.toggle('flipped');
+            });
+
+            // Close button
+            var closeBtn = back.querySelector('.card-back-close');
+            if (closeBtn) {
+                closeBtn.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    card.classList.remove('flipped');
+                });
+            }
+        });
+    }
+
+    // ============================================================
     // SKILLS RADAR CHART
     // ============================================================
     function initRadarChart() {
@@ -323,9 +417,19 @@
         if (!canvas) return;
 
         var ctx = canvas.getContext('2d');
-        var W = canvas.width = 400;
-        var H = canvas.height = 400;
-        var cx = W / 2, cy = H / 2, maxR = 150;
+        function sizeRadar() {
+            var size = Math.min(400, window.innerWidth - 40);
+            canvas.width = size;
+            canvas.height = size;
+            return size;
+        }
+        var S = sizeRadar();
+        var cx = S / 2, cy = S / 2, maxR = S * 0.375;
+        window.addEventListener('resize', function() {
+            S = sizeRadar();
+            cx = S / 2; cy = S / 2; maxR = S * 0.375;
+            draw(animProgress || 1);
+        });
 
         var labels = [
             I18N.t('radar-frontend'), I18N.t('radar-backend'),
@@ -348,7 +452,7 @@
         obs.observe(canvas);
 
         function draw(p) {
-            ctx.clearRect(0, 0, W, H);
+            ctx.clearRect(0, 0, S, S);
 
             // Grid circles
             [0.2, 0.4, 0.6, 0.8, 1].forEach(function(s) {
@@ -524,6 +628,80 @@
             container.innerHTML = '<p class="github-loading" data-i18n="github-error">' + I18N.t('github-error') + '</p>';
         };
         img.src = 'https://ghchart.rshah.org/00ffff/Jiayoujw';
+    }
+
+    // ============================================================
+    // MOBILE NAVIGATION
+    // ============================================================
+    function initMobileNav() {
+        var hamburger = document.getElementById('hamburger');
+        var overlay = document.getElementById('mobile-nav-overlay');
+        var links = overlay ? overlay.querySelectorAll('.mobile-nav-link') : [];
+        if (!hamburger || !overlay) return;
+
+        function open() {
+            hamburger.classList.add('active');
+            overlay.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function close() {
+            hamburger.classList.remove('active');
+            overlay.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        hamburger.addEventListener('click', function() {
+            if (overlay.classList.contains('active')) { close(); }
+            else { open(); }
+        });
+
+        // Close on Escape
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' && overlay.classList.contains('active')) {
+                close();
+            }
+        });
+
+        // Close on overlay click (outside links)
+        overlay.addEventListener('click', function(e) {
+            if (e.target === overlay) close();
+        });
+
+        links.forEach(function(link) {
+            link.addEventListener('click', function(e) {
+                var href = link.getAttribute('href');
+                if (href && href.startsWith('#')) {
+                    e.preventDefault();
+                    close();
+                    var target = document.querySelector(href);
+                    if (target) {
+                        setTimeout(function() {
+                            target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                        }, 350);
+                    }
+                }
+            });
+        });
+    }
+
+    // ============================================================
+    // WINDOW MANAGER
+    // ============================================================
+    function initWindowManager() {
+        if (!window.NexusWM) return;
+        // Wrap existing terminal into a window
+        window.NexusWM.createTerminalWindow();
+    }
+
+    // ============================================================
+    // GLITCH TRIGGER (double-click)
+    // ============================================================
+    function initGlitchTrigger() {
+        document.body.addEventListener('dblclick', function(e) {
+            if (e.target.closest('input, textarea, a, button, .terminal-window, .os-window, .project-card[data-flip]')) return;
+            if (window.NexusGlitch) window.NexusGlitch.trigger(500);
+        });
     }
 
     // ============================================================
