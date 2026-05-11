@@ -321,24 +321,6 @@
             '2077': {
                 desc: t('cmd-2077-desc') || '???',
                 run: function() { triggerEasterEgg('2077'); return ''; }
-            },
-            open: {
-                desc: t('cmd-open-desc'),
-                run: function(args) {
-                    var target = (args[0] || 'about').toLowerCase();
-                    if (!window.NexusWM) return '<span class="out-error">Window manager not loaded.</span>';
-                    if (target === 'about') { window.NexusWM.createAboutWindow(); }
-                    else if (target === 'projects') { window.NexusWM.createProjectsWindow(); }
-                    else { return '<span class="out-error">Unknown window: ' + target + '. Try: about, projects</span>'; }
-                    return '<span class="out-success">Window opened: ' + target + '</span>';
-                }
-            },
-            glitch: {
-                desc: t('cmd-glitch-desc'),
-                run: function() {
-                    if (window.NexusGlitch) { window.NexusGlitch.trigger(600); }
-                    return '<span class="out-warn">[GLITCH] ' + (t('cmd-glitch-active') || 'Reality destabilized.') + '</span>';
-                }
             }
         };
     }

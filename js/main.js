@@ -92,15 +92,12 @@
         initPageTransitions();
         initBackToTop();
         initProjectModal();
-        initProjectFlip();
         initRadarChart();
         initTheme();
         initContactForm();
         initEasterDismiss();
         initGithubHeatmap();
         initMobileNav();
-        initGlitchTrigger();
-        initWindowManager();
     }
 
     // ============================================================
@@ -315,96 +312,6 @@
         document.addEventListener('keydown', function(e) {
             if (e.key === 'Escape' && overlay.classList.contains('active')) {
                 closeModal();
-            }
-        });
-    }
-
-    // ============================================================
-    // PROJECT CARD 3D FLIP
-    // ============================================================
-    function initProjectFlip() {
-        var cards = document.querySelectorAll('.project-card[data-flip]');
-        if (!cards.length) return;
-
-        // Back face content per project ID
-        var backData = {
-            'PRJ_001': {
-                descLong: I18N.t('prj-1-desc-long'),
-                features: [I18N.t('prj-1-feat-1'), I18N.t('prj-1-feat-2'), I18N.t('prj-1-feat-3')]
-            },
-            'PRJ_002': {
-                descLong: I18N.t('prj-2-desc-long'),
-                features: [I18N.t('prj-2-feat-1'), I18N.t('prj-2-feat-2'), I18N.t('prj-2-feat-3')]
-            },
-            'PRJ_003': {
-                descLong: I18N.t('prj-3-desc-long'),
-                features: [I18N.t('prj-3-feat-1'), I18N.t('prj-3-feat-2'), I18N.t('prj-3-feat-3')]
-            },
-            'PRJ_004': {
-                descLong: I18N.t('prj-4-desc-long'),
-                features: [I18N.t('prj-4-feat-1'), I18N.t('prj-4-feat-2'), I18N.t('prj-4-feat-3')]
-            },
-            'PRJ_005': {
-                descLong: I18N.t('prj-5-desc-long'),
-                features: [I18N.t('prj-5-feat-1'), I18N.t('prj-5-feat-2'), I18N.t('prj-5-feat-3')]
-            },
-            'PRJ_006': {
-                descLong: I18N.t('prj-6-desc-long'),
-                features: [I18N.t('prj-6-feat-1'), I18N.t('prj-6-feat-2'), I18N.t('prj-6-feat-3')]
-            }
-        };
-
-        cards.forEach(function(card) {
-            // Wrap existing children in card-inner > card-front
-            var children = Array.prototype.slice.call(card.children);
-            var inner = document.createElement('div');
-            inner.className = 'card-inner';
-
-            var front = document.createElement('div');
-            front.className = 'card-front';
-            children.forEach(function(c) { front.appendChild(c); });
-
-            // Build back face
-            var idEl = front.querySelector('.project-id');
-            var id = idEl ? idEl.textContent.trim() : '';
-            var titleEl = front.querySelector('.project-title');
-            var title = titleEl ? titleEl.textContent : '';
-            var techEls = front.querySelectorAll('.tech-tag');
-            var data = backData[id] || { descLong: '', features: [] };
-
-            var back = document.createElement('div');
-            back.className = 'card-back';
-            var html = '<button class="card-back-close">[X] ' + I18N.t('card-flip-close') + '</button>';
-            html += '<div class="card-back-thumb"></div>';
-            html += '<h3 class="card-back-title">' + title + '</h3>';
-            html += '<p class="card-back-desc-long">' + data.descLong + '</p>';
-            html += '<div class="card-back-tech">';
-            techEls.forEach(function(t) { html += '<span class="tech-tag">' + t.textContent + '</span>'; });
-            html += '</div>';
-            if (data.features.length) {
-                html += '<div class="card-back-extra">';
-                data.features.forEach(function(f) { html += '<span class="card-back-feature">' + f + '</span>'; });
-                html += '</div>';
-            }
-            back.innerHTML = html;
-
-            inner.appendChild(front);
-            inner.appendChild(back);
-            card.appendChild(inner);
-
-            // Click to flip
-            card.addEventListener('click', function(e) {
-                if (e.target.closest('.card-back-close') || e.target.closest('a')) return;
-                card.classList.toggle('flipped');
-            });
-
-            // Close button
-            var closeBtn = back.querySelector('.card-back-close');
-            if (closeBtn) {
-                closeBtn.addEventListener('click', function(e) {
-                    e.stopPropagation();
-                    card.classList.remove('flipped');
-                });
             }
         });
     }
@@ -682,24 +589,6 @@
                     }
                 }
             });
-        });
-    }
-
-    // ============================================================
-    // WINDOW MANAGER
-    // ============================================================
-    function initWindowManager() {
-        if (!window.NexusWM) return;
-        // Window manager initialized — floating windows available via terminal commands
-    }
-
-    // ============================================================
-    // GLITCH TRIGGER (double-click)
-    // ============================================================
-    function initGlitchTrigger() {
-        document.body.addEventListener('dblclick', function(e) {
-            if (e.target.closest('input, textarea, a, button, .terminal-window, .os-window, .project-card[data-flip]')) return;
-            if (window.NexusGlitch) window.NexusGlitch.trigger(500);
         });
     }
 
